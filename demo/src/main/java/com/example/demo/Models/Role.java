@@ -1,19 +1,16 @@
 package com.example.demo.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
+@Table
 @Data
 public class Role {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-    private int roleId;
+    private Integer roleId;
     private String name;
-
 }

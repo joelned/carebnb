@@ -1,12 +1,21 @@
-package com.example.demo.DTOs;
+package com.example.demo.Models;
 
-import com.example.demo.Models.UserEntity;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
 
+@Entity
+@Table
 @Data
-public class RefugeeDTO {
+public class RefugeeDetails {
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private Integer refugeeDetailsId;
+    @OneToOne
+    @JoinColumn(name = "refugee_id")
     private UserEntity userEntity;
     private String name;
     private int age;

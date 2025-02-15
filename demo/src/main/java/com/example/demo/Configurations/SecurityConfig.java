@@ -1,17 +1,21 @@
 package com.example.demo.Configurations;
 
+import com.example.demo.Services.UserDetailsServiceImpl;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -20,30 +24,58 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
+@EnableMethodSecurity
+@EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private RsaKeyProperties rsaKeys;
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        return http
-                .authorizeHttpRequests(registry-> registry
-                        .requestMatchers("/admin").permitAll()
-                        .anyRequest().authenticated()
-                )
+    private final RsaKeyProperties rsaKeys;
+    private final UserDetailsServiceImpl userDetailsService;
 
-                .build();
+    public SecurityConfig(RsaKeyProperties rsaKeys, UserDetailsServiceImpl userDetailsService) {
+        this.rsaKeys = rsaKeys;
+        this.userDetailsService = userDetailsService;
     }
+
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+         return http
+                 .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/*/register","/api/v1/auth/login").permitAll()
+                        .anyRequest().authenticated())
+
+                 .oauth2ResourceServer(oauth -> oauth
+                         .jwt(Customizer.withDefaults())
+                 )
+                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                 .formLogin(form -> form
+                         .loginPage("/login")
+                         .failureUrl("/trash")
+                         .permitAll()
+                         .defaultSuccessUrl("/home")
+                 )
+                 .addFilterBefore(new CookieAuthenticationFilter(
+                         matcher(),
+                         jwtDecoder(),
+                         converter()),
+                         UsernamePasswordAuthenticationFilter.class
+                 )
+                 .exceptionHandling(exception -> exception
+                         .accessDeniedPage("/access-denied")
+                 )
+                 .build();
+
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+    throws Exception{
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    JwtAuthenticationConverter converter(){
-        return new JwtAuthenticationConverter();
     }
 
     @Bean
@@ -52,15 +84,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtEncoder jwtEncoder(){
-        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
-        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwkSource);
+    public RequestMatcher matcher(){
+        return new AntPathRequestMatcher("/**");
     }
 
+    @Bean
+    public JwtAuthenticationConverter converter(){
+        return new JwtAuthenticationConverter();
+    }
 
     @Bean
     JwtDecoder jwtDecoder(){
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
+    }
+
+
+    @Bean
+    JwtEncoder jwtEncoder(){
+        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
+        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jwks);
     }
 }
