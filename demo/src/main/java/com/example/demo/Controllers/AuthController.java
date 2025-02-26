@@ -68,7 +68,7 @@ public class AuthController {
             String token = tokenService.generateToken(authentication);
             UserEntity user = userRepository.findByUsername(username);
             List<Role> role = user.getRole();
-            List<String>nameOfRole = role.stream().map(Role::getName).toList();
+            List<String> nameOfRole = role.stream().map(Role::getName).toList();
             ResponseCookie responseCookie = ResponseCookie.from("jwt", token)
                     .secure(true)
                     .path("/")
@@ -85,12 +85,12 @@ public class AuthController {
                         .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                         .location(URI.create("/host"))
                         .body(response);
+            }else {
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                        .location(URI.create("/refugee"))
+                        .body(response);
             }
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                    .location(URI.create("/refugee"))
-                    .body(response);
-
         } catch (Exception ex) {
             ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), LocalDateTime.now());
             logger.error("Login from [{}] failed: {}", username, ex.getMessage());
@@ -112,9 +112,12 @@ public class AuthController {
         }
         catch(Exception ex){
             ErrorResponse errorResponse = new ErrorResponse("Conflict", LocalDateTime.now());
-            logger.error("Error: {}", ex.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<String>test(){
+        return new ResponseEntity<>("Test Successful", HttpStatus.OK);
+    }
 }
