@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugee Registration Form</title>
+    <link rel="stylesheet" href="/css/side log.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <img src="/images/Form image.png" alt="Sidebar Image">
+        <div class="quote">
+            "There's nothing more important than a good, safe, secure home." - Rosalynn Carter
+        </div>
+    </div>
+
+    <div class="main-content">
+        <form th:action="@{/api/v1/auth/register}" method="post" enctype="multipart/form-data">
+        <div class="header">
+            <h2>Let's get started</h2>
+            <div class="profile-upload">
+                <img id="profile-image" src="#" alt="Profile Picture" style="display:none;">
+                <input name="profileImage" type="file" id="profile-input" accept="image/*">
+                <label for="profile-input" id="upload-label"></label>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="form-group">
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="Olena Petro" style="background-image: none;">
+                </div>
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="0" style="background-image: none;" value="48">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="olenapetro2@gmail.com" style="background-image: none;">
+                </div>
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </div>
+
+             <div class="form-group">
+                <div>
+                    <label for="dependents">Number of Dependents</label>
+                    <select id="dependents" name="dependents">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="country">Country of Origin</label>
+                    <select id="country" name="countryOfOrigin">
+                        <option>Afghanistan</option>
+                        <option>Syria</option>
+                        <option>Iraq</option>
+                        <option>Ukraine</option>
+                        <option>Venezuela</option>
+                        <!-- Add more countries as needed -->
+                    </select>
+                </div>
+                <div>
+                    <label for="flee">Country of Flee</label>
+                    <select id="flee" name="countryOfFlee">
+                        <option>USA</option>
+                        <option>Canada</option>
+                        <option>Germany</option>
+                        <option>France</option>
+                        <option>UK</option>
+                        <option>Poland</option>
+                        <option>Ukraine</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="languages">Languages Spoken</label>
+                    <input type="text" id="languages" name="languagesSpoken" placeholder="e.g., English, Spanish" style="background-image: none;">
+                </div>
+                <div>
+                    <label for="preferred_location">Preferred Location (Lagos)</label>
+                    <select id="preferred_location" name="preferredLocation">
+                        <option>Ikeja</option>
+                        <option>Victoria Island</option>
+                        <option>Lekki</option>
+                        <option>Surulere</option>
+                        <option>Yaba</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="special_needs">Special Needs</label>
+                    <select id="special_needs" name="specialNeeds">
+                        <option>None</option>
+                        <option>Walking Disability</option>
+                        <option>Visual Impairment</option>
+                        <option>Hearing Impairment</option>
+                        <option>Dietary Restrictions</option>
+                        <option>Other</option>
+                        <!-- Add more special needs options as needed -->
+                    </select>
+                </div>
+            </div>
+
+            <label for="about_yourself">Tell us about yourself</label>
+            <textarea id="about_yourself" name="selfDescription" rows="4" cols="50" placeholder="Briefly describe your situation and needs"></textarea>
+
+        </div>
+            <button type = "submit" id="done-button">Done</button>
+        </form>
+    </div>
+
+    <script src="/js/side log.js"></script>
+<!--    <script>-->
+<!--        document.getElementById('done-button').addEventListener('click', function() {-->
+<!--            // Replace 'home.html' with the actual URL of your home screen-->
+<!--            window.location.href = 'home.html';-->
+<!--        });-->
+<!--    </script>-->
+</body>
+</html>

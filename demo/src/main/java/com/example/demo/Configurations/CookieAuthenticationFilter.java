@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class CookieAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -32,10 +33,15 @@ public class CookieAuthenticationFilter extends AbstractAuthenticationProcessing
     @Override
     public boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String URI = request.getRequestURI();
-        if(URI.contains("/api/v1/auth/login") ||
-                URI.matches("/api/v1/auth/.*/register") || URI.equals("/login") ||
-                URI.equals("/favicon.ico" ) || URI.equals("/login?error=true") || URI.equals("/")
-        ){
+        Set<String> uriContainsRoutes = Set.of("/api/v1/auth/login", "/js/",
+                "/css/", "/images/","/signup/refugee", "/signup/host", "/api/v1/auth/register");
+        Set<String> equals = Set.of("/favicon.ico", "/login","/get-started", "/", "/welcome",
+                "/error", "/signup", "/home");
+        boolean uriContains = uriContainsRoutes.stream().anyMatch(URI::contains);
+        boolean uriEquals = equals.stream().anyMatch(URI::equals);
+
+
+        if(uriContains || URI.matches("/api/v1/auth/.*/register") || uriEquals){
             return false;
         }
         return super.requiresAuthentication(request, response);

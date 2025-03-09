@@ -17,6 +17,7 @@ public class RefugeeDetails {
     @OneToOne
     @JoinColumn(name = "refugee_id")
     private UserEntity userEntity;
+    private String profilePicturePath;
     private String name;
     private int age;
     private String email;

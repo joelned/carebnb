@@ -1,0 +1,372 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.container {
+    width: 85%;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    /* Distribute elements to the sides */
+    justify-content: space-between;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #FF5A5F; /* Airbnb red */
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    /* Remove margin-left: auto; */
+}
+
+.header-right a {
+    text-decoration: none;
+    color: #555;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.header-right a:hover {
+    color: #FF5A5F;
+}
+
+/* Search Bar */
+.search-bar-container {
+    display: flex;
+    justify-content: center; /* Center the search bar */
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust minmax for responsiveness */
+    gap: 19px; /* Increased Gap */
+    align-items: center;
+    padding: 8px 20px; /* Slightly Slimmer and Adjusted Padding */
+    border: 1px solid #ddd;
+    border-radius: 25px; /* Rounded Corners */
+    background-color: #f9f9f9;
+    max-width: 70%; /* Set Overall Width to 70% */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-input-container input[type="text"],
+.search-input-container input[type="date"] {
+    padding: 6px; /* Reduced Padding */
+    border: none;
+    border-radius: 20px; /* Rounded Corners */
+    font-size: 0.85em; /* Smaller Font */
+    color: #555;
+    background-color: #fff;
+    outline: none;
+}
+
+.search-input-container input::placeholder {
+    color: #333; /* Lighter Placeholder Text */
+}
+
+.search-input-container .sub-placeholder {
+    font-size: 0.65em; /* Smaller Font */
+    color: #888;
+    text-align: left;
+    padding-left: 6px; /* Reduced Padding */
+}
+
+.search-bar button {
+    background-color: #FF5A5F;
+    color: white;
+    border: none;
+    width: 40px; /* Slightly Smaller Circle */
+    height: 40px; /* Slightly Smaller Circle */
+    border-radius: 50%; /* Circular Button */
+    cursor: pointer;
+	padding:10px;
+    font-size: 0.9em; /* Slightly Smaller Icon */
+    transition: background-color 0.3s ease;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px; /* add a left margin to separate circle button from the "WHO" input */
+	margin-right:0px;
+}
+
+.search-bar button:hover {
+    background-color: #E44247;
+}
+
+/* Main Content - Two Column Layout */
+.main-content {
+    display: flex;
+    gap: 30px;
+}
+
+.left-column {
+    flex: 2; /* Takes up 2/3 of the space */
+}
+
+.right-column {
+    flex: 1; /* Takes up 1/3 of the space */
+    margin-top: 0px; /* Add top margin to align with "About this place" */
+}
+
+/* Image Grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two Columns */
+    gap: 10px;
+}
+
+.main-image {
+    grid-column: 1 / 3; /* Span Both Columns */
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.side-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two Columns for Side Images */
+    gap: 10px;
+}
+
+.side-images img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Details Section */
+.details {
+    margin-bottom: 30px;
+}
+
+.details h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.details p {
+    color: #777;
+    font-size: 1.1em;
+}
+
+/* Address Section */
+.address {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.address i {
+    margin-right: 8px;
+    color: #777;
+}
+
+/* Host Info */
+.host-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.host-profile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Info Section */
+.info-section {
+    border: 1px solid #eee;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.info-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    color: #444;
+}
+
+.info-section p {
+    color: #666;
+}
+
+/* Amenities List */
+.amenities {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.amenities li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.amenities li i {  /* Style the icons */
+    margin-right: 8px;
+    font-size: 1.2em;
+    color: #555;
+}
+
+/* Styles for the Check-in Card (Right Column) */
+.checkin-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    background-color: #fff;
+}
+
+/* Styles for the check-in, check-out, and guest sections within the card */
+.checkin-section,
+.checkout-section {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+    width: 100%;
+}
+
+.guest-section {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+/* Flexbox for Check-in and Check-out */
+.checkin-checkout-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.checkin-checkout-container .checkin-section,
+.checkin-checkout-container .checkout-section {
+    flex: 1;
+}
+
+/* Style for the separator lines */
+.separator {
+    border-bottom: 1px solid #eee;
+    margin: 10px 0;
+}
+
+/* Reserve Button (Right Column) */
+.right-column .checkin-card button {
+    background-color: #FF5A5F;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    width: 100%;  /* Make the button full width */
+}
+
+.right-column .checkin-card button:hover {
+    background-color: #E44247;
+}
+
+.address{
+    display: flex;
+        align-items: center;
+    margin-right: 150px;
+}
+
+.rating{
+    display: inline-block;
+    margin-right: 150px;
+}
+
+.user{
+    display: inline-block;
+}
+
+/*button*/
+button {
+    background-color: #FF5A5F;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.show-all-amenities-button {
+    background-color:  #FF5A5F; /* setting the property */
+    color: white;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    text-align: left;
+}
+
+.show-all-amenities-button:hover {
+    background-color: #E44247;
+}
+/*two details container*/
+.details-container{
+display: flex;
+}

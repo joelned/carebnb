@@ -14,5 +14,7 @@ public class RegisterDTO {
     @NotBlank(message = "Password is required")
     @Size(min = 3, max = 64, message = "Password must be between 3 and 64 characters")
     private String password;
-    private List<Role> role;
+    private String firstName;
+    private String email;
+    private String lastName;
 }

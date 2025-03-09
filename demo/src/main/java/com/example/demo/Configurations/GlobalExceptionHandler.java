@@ -3,19 +3,41 @@ package com.example.demo.Configurations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.naming.AuthenticationException;
 
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object>handleBadCredentialsException(BadCredentialsException ex){
-        return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
+    public String handleBadCredentialsException(BadCredentialsException ex, Model model,
+                                                RedirectAttributes redirectAttributes){
+       redirectAttributes.addFlashAttribute("error", "Bad Credentials");
+       return "redirect:/login";
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public String handleAuthenticationException(AuthenticationException ex, Model model){
+        model.addAttribute("error", "Authentication Failed");
+        return "login";
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public String handleUsernameNotFoundException(UsernameNotFoundException ex, Model model){
+        model.addAttribute("error", "Username not found");
+        return "login";
+    }
+    @ExceptionHandler(CredentialsExpiredException.class)
+    public String handleCredentialsExpiredException(CredentialsExpiredException ex, Model model){
+        return "login";
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object>handleMethodNotValidException(MethodArgumentNotValidException ex){
         StringBuilder errors = new StringBuilder();

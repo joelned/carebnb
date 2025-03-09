@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +17,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -37,27 +38,33 @@ public class SecurityConfig {
     private final RsaKeyProperties rsaKeys;
     private final UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private CustomSuccessHandler customSuccessHandler;
     public SecurityConfig(RsaKeyProperties rsaKeys, UserDetailsServiceImpl userDetailsService) {
         this.rsaKeys = rsaKeys;
         this.userDetailsService = userDetailsService;
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception{
          return http
                  .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/*/register","/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/*/register","/api/v1/auth/test","/api/v1/auth/login",
+                                "/css/**", "/js/**",
+                                "/images/**", "/", "/signup",
+                                "/signup/**", "/favicon.ico", "/login", "/get-started",
+                                "/api/v1/auth/register", "/home", "/error").permitAll()
                         .anyRequest().authenticated())
 
                  .oauth2ResourceServer(oauth -> oauth
                          .jwt(Customizer.withDefaults())
                  )
-                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                  .formLogin(form -> form
                          .loginPage("/login")
+                         .successHandler(customSuccessHandler)
                          .permitAll()
-                         .defaultSuccessUrl("/home")
                  )
                  .addFilterBefore(new CookieAuthenticationFilter(
                          matcher(),
@@ -65,9 +72,8 @@ public class SecurityConfig {
                          converter()),
                          UsernamePasswordAuthenticationFilter.class
                  )
-                 .exceptionHandling(exception -> exception
-                         .accessDeniedPage("/access-denied")
-                 )
+                 .addFilterBefore(new AnonymousAuthenticationFilter("annonymousKey"), CookieAuthenticationFilter.class)
+                 .anonymous(AbstractHttpConfigurer::disable)
                  .build();
 
     }

@@ -1,0 +1,261 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #D9D9D9;
+    padding: 20px;
+    height: 100vh;
+    position: fixed; /* Fix sidebar */
+    top: 0;
+    left: 0;
+    overflow: hidden; /* Prevent sidebar from scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: auto;
+    background-size: cover;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.sidebar nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 10px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.sidebar nav a.active {
+    color: #FF5A5F;
+    /*background-color: #f2f2f2;*/
+    border-radius: 5px;
+	border-left: 5px solid #F44336;
+}
+
+.sidebar nav a span {
+    margin-right: 10px;
+    color: #FF5A5F;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 55px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #ccc;
+}
+
+.content {
+    flex: 1;
+    padding: 40px;
+    margin-left: 270px; /* Ensure content doesn't go under sidebar */
+    overflow-y: auto;
+    height: 100vh;
+}
+
+header {
+	position:sticky;
+	top: 0;
+	z-index: 10; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+	
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.3em;
+    color: #222;
+    font-weight: 600;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+#add-property-button {
+    background-color: #fff;
+    color: #F44336;
+    padding: 12px 20px;
+    border: 1px solid #F44336;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#add-property-button:hover {
+    background-color: #F44336;
+    color: white;
+}
+
+.location-filter select {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23777"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+/* Properties Grid */
+.properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 305px);
+    gap: 25px;
+    justify-content: flex-start;
+}
+
+.property-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    width: 305px;
+    height: 311px;
+    box-sizing: border-box;
+}
+
+.property-card:hover {
+    transform: translateY(-3px);
+}
+
+.property-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.property-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    color: #222;
+}
+
+.property-card .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.property-card .actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.property-card .actions button.details {
+    background-color: #f2f2f2;
+    color: #555;
+}
+
+.property-card .actions button.edit {
+    background-color: #F44336;
+    color: white;
+}
+
+.property-card .actions button.details:hover {
+    background-color: #ddd;
+}
+
+.property-card .actions button.edit:hover {
+    background-color: #d32f2f;
+}
+
+.property-card .location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8em;
+    color: #777;
+    margin-top: 10px;
+}
+
+/* No Properties State */
+.no-properties {
+    text-align: center;
+    padding: 40px;
+    font-style: italic;
+    color: #999;
+}
+
+.candy-location-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: #fff;
+    margin-right: 5px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .properties-grid {
+        grid-template-columns: repeat(auto-fit, minmax(305px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .properties-grid {
+        grid-template-columns: 1fr;
+    }
+}

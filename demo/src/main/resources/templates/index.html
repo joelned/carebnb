@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carebnb Onboarding</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="yam">
+    <div class="container">
+        <header>
+            <img src="/images/Group 123.png" alt="Carebnb Logo" class="logo">
+        </header>
+
+        <main class="welcomeBanner">
+            
+            <div class="welcome-text">
+                <h2>WELCOME</h2>
+                <p>Find appropriate housing, We care about your shelter.</p>
+            </div>
+            
+
+            <div class="button-container">
+                  <a th:href="@{/signup/refugee}" class="to_create_page">Join as Refugee</a>
+                  <a th:href="@{/signup/host}" class="to_create_page">Join as Host</a>
+            </div>
+        </main>
+        <footer>
+            <!-- Optional: You can add footer content here -->
+        </footer>
+    </div>
+</body>
+</html>

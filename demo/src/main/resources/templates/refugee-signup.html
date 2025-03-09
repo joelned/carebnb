@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugee Signup</title>
+    <link rel="stylesheet" href="/css/sign.css">
+</head>
+<body>
+<div class="container">
+    <div class="form-section">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h1>Create An Account</h1>
+        <form th:action="@{/api/v1/auth/refugee/register}" th:object="${registerDTO}" method="post" id="signup-form">
+            <input type="text" id="username" name="username" placeholder="Username">
+            <input type="password" id="password" name="password" placeholder="Password">
+
+            <button type="submit" class="create-button">Create Account</button>
+        </form>
+
+        <div th:if="${error != null}" class = "message">
+            <p th:text="${error}"></p>
+        </div>
+
+        <div th:if="${success != null}" class = "success-message">
+            <p th:text="${success}"></p>
+        </div>
+        <div class="register-link">
+            <p>Have an account? <a th:href="@{/login}">Login</a></p>
+        </div>
+    </div>
+
+    <div class="image-section">
+        <img src="/images/Group 30.png" alt="Carebnb Image">
+    </div>
+</div>
+</body>
+</html>

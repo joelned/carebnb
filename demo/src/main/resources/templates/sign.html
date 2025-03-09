@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Signup</title>
+    <link rel="stylesheet" href="/css/sign.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <h1>Create An Account</h1>
+            <form th:action="@{/api/v1/auth/host/register}" method="post" id="signup-form">
+                <div class="name-fields">
+                    <input type="text" id="firstName" name="firstName" placeholder="First Name">
+                    <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+                </div>
+                <input type="email" id="email" name="email" placeholder="Email">
+                <input type="text" id="username" name="username" placeholder="Username">
+                <input type="password" id="password" name="password" placeholder="Password">
+
+                <button type="submit" class="create-button">Create Account</button>
+            </form>
+            <div class="register-link">
+                <p>Have an account? <a th:href="@{/login}">Login</a></p>
+            </div>
+
+            <div th:if="${error != null}" class = "message">
+                <p th:text="${error}"></p>
+            </div>
+            <div th:if="${success != null}" class = "success-message">
+               <p th:text="${success}"></p>
+            </div>
+
+        </div>
+
+        <div class="image-section">
+            <img src="/images/Group 30.png" alt="Carebnb Image">
+        </div>
+
+    </div>
+</body>
+</html>

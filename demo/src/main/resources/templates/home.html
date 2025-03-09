@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carebnb Apartments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="/images/carebnb logo.png" alt="">
+            carebnb
+        </div>
+        <div class="header-right">
+            <div th:if="${role} == 'HOST'">
+                <a th:href="@{/create-apartment}" style="text-decoration: none; color: FF5A5F;"><span>Rent your home</span></a>
+            </div>
+            <i class="fas fa-globe"></i>
+            <div th:if="${role} == 'REFUGEE'">
+                <a th:href="@{/refugee-settings}" style="text-decoration: none; color: FF5A5F;"><i class="fas fa-user-circle"></i></a>
+            </div>
+            <div th:if="${role} == 'HOST'">
+                <a th:href="@{/host-settings}" style="text-decoration: none; color:FF5A5F;"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <div class="input-wrapper">
+            <input type="text" id="where" placeholder="WHERE">
+            <span class="sub-placeholder">Search destinations</span>
+        </div>
+        <span class="separator">|</span>
+        <div class="input-wrapper">
+            <input type="text" id="check-in" placeholder="CHECK IN" readonly>
+            <span class="sub-placeholder">Add dates</span>
+        </div>
+        <span class="separator">|</span>
+        <div class="input-wrapper">
+            <input type="text" id="check-out" placeholder="CHECK OUT" readonly>
+            <span class="sub-placeholder">Add dates</span>
+        </div>
+        <span class="separator">|</span>
+        <div class="input-wrapper">
+            <input type="number" id="who" placeholder="WHO">
+            <span class="sub-placeholder">Add guests</span>
+        </div>
+        <span class="separator">|</span>
+        <div class="input-wrapper">
+            <input type="number" id="room" placeholder="ROOM">
+            <span class="sub-placeholder">Room size</span>
+        </div>
+        <button id="search-button"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="container">
+        <!-- Dummy Apartment Cards -->
+        <div th:each="listing : ${houseListings}" class="card" th:data-location="${listing.address}">
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <div th:each="image : ${listing.listingImages}" class="carousel-item active">
+                        <a th:href="@{/listing-details/{id}(id=${listing.houseListingId})}"><img th:src="@{${image.imagePath}}" alt="Apartment Image 1"></a>
+                    </div>
+                </div>
+                <button class="carousel-control prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title" th:text="${listing.address}"></h3>
+                <h4 class="card-subtitle" th:text="'Stay with ' + ${listing.hostDetails.firstName}"></h4>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© Carebnb, inc.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/home.js"></script>
+</body>
+
+</html>

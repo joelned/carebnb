@@ -1,8 +1,10 @@
 package com.example.demo.Services;
 
+import com.example.demo.DTOs.ListingImagesDTO;
 import com.example.demo.DTOs.RefugeeProjection;
 import com.example.demo.Models.*;
 import com.example.demo.Repositories.*;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -45,11 +48,13 @@ public class ListingService {
     private RefugeeRepository refugeeRepository;
     Logger logger = LoggerFactory.getLogger(ListingService.class);
 
-    public void uploadListing(String name, int maxGuests, String description, String address,
-                              List<String> offerings, List<MultipartFile> images, Principal principal) throws Exception {
+    public void uploadListing(HttpSession session, String name, int maxGuests, String description, String address,
+                              List<String> offerings, MultipartFile[] images) throws Exception {
 
-        String username = principal.getName();
+        String username = (String)session.getAttribute("username");
+        System.out.println(username);
         HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
+        System.out.println("Recieved "+ images.length + "images");
         if(hostDetails == null){
             throw new Exception("Host Details not Found for user: " + username);
         }
@@ -64,34 +69,40 @@ public class ListingService {
 
             listingRepository.save(houseListing);
             logger.info("Listing Details Saved");
-            File imagePath = new File("/Pictures/carebnb/");
+            File imagePath = new File("Pictures/");
             Path path = imagePath.toPath();
             if (!imagePath.exists()) {
                 Files.createDirectories(path);
-                System.out.println("Folder created at " + path.toAbsolutePath());
             }
             for (MultipartFile image : images) {
-                saveImageToFile(image, imagePath, houseListing);
+                HouseListingImages listingImages = saveImageToFile(image, imagePath, houseListing);
+                if(listingImages != null){
+                    houseListing.getListingImages().add(listingImages);
+                }
             }
+            listingRepository.save(houseListing);
         } catch(Exception ex){
             logger.error(ex.getMessage());
         }
     }
 
-   public void saveImageToFile(MultipartFile image, File pathDirectory, HouseListing houseListing) throws Exception{
+   public HouseListingImages saveImageToFile(MultipartFile image, File pathDirectory, HouseListing houseListing) throws Exception{
         try{
         String fileExtension = Objects.requireNonNull(image.getOriginalFilename()).substring(image.getOriginalFilename().lastIndexOf("."));
         String fileName = UUID.randomUUID().toString() + fileExtension;
-        String pathToImage = pathDirectory.toString() + fileName;
+        String pathToImage = pathDirectory.toString() + "\\" + fileName;
         Path path = Paths.get(pathToImage);
         Files.write(path, image.getBytes());
         HouseListingImages houseListingImages = new HouseListingImages();
-        houseListingImages.setImagePath(pathToImage);
+        String savedImagePath = pathToImage.replace("\\", "/");
+        houseListingImages.setImagePath(savedImagePath);
         houseListingImages.setHouseListing(houseListing);
         imagesRepository.save(houseListingImages);
+        return houseListingImages;
         }
         catch(Exception ex){
             logger.error(ex.getMessage());
+            return null;
         }
     }
 
@@ -99,7 +110,6 @@ public class ListingService {
     public void applyForListings(String name, Principal principal) throws InstanceNotFoundException {
         HouseListing houseListing = listingRepository.findByName(name);
         RefugeeDetails refugeeDetails = refugeeRepository.findByName(principal.getName());
-        System.out.println(principal.getName());
         if(houseListing == null){
            throw new InstanceNotFoundException("House Listing not found");
         }
@@ -150,7 +160,16 @@ public class ListingService {
             simpleMailMessage.setText(message);
             mailSender.send(simpleMailMessage);
         } catch(Exception ex){
-            System.out.println(ex);
+            System.out.println(ex.getMessage());
+            logger.error(String.valueOf(ex));
         }
     }
+
+    public List<ListingImagesDTO>getListingImages(){
+        return imagesRepository.findListingImages();
+    }
+    public List<HouseListingImages>getSpecificListingImages(int id){
+        return imagesRepository.findByHouseListing_HouseListingId(id);
+    }
+
 }

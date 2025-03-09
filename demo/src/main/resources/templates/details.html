@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carebnb - Room in Ikeja, Lagos</title>
+    <link rel="stylesheet" href="/css/details.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="referrerpolicy" />
+</head>
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <img src="/images/carebnb logo.png" alt="Carebnb Logo" class="logo-image">
+                <div class="logo">carebnb</div>
+            </div>
+            <div class="header-right">
+                <a href="#">Rent your home</a>
+                <a href="#"> <i class="fas fa-globe"></i> </a>
+                <a href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 11.37A7 7 0 0 0 8 1z"/>
+                  </svg></a>
+            </div>
+        </header>
+
+        <!-- Centered Search Bar -->
+        <div class="search-bar-container">
+            <div class="search-bar">
+                <div class="search-input-container">
+                    <input type="text" placeholder="WHERE">
+                    <span class="sub-placeholder">Search destinations</span>
+                </div>
+                <div class="search-input-container">
+                    <input type="text" onfocus="(this.type='date')" placeholder="CHECK IN">
+                    <span class="sub-placeholder">Add dates</span>
+                </div>
+                <div class="search-input-container">
+                    <input type="text"  onfocus="(this.type='date')" placeholder="CHECK OUT">
+                    <span class="sub-placeholder">Add dates</span>
+                </div>
+                <div class="search-input-container">
+                    <input type="text" placeholder="ROOM">
+                    <span class="sub-placeholder">Add Room size</span>
+                </div>
+                <div class="search-input-container">
+                    <input type="text" placeholder="WHO">
+                    <span class="sub-placeholder">Add guests</span>
+                </div>
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- Left Column (Images, Details, "About this place", "What this place offers") -->
+            <div class="left-column">
+                <h2>The Bay Arena</h2>
+
+                <div th:each="listing : ${houseListing}">
+                <div class="image-grid" th:each="image : ${imagesForListing}">
+                    <div th:each="images, iterStat : ${image.imagePath}" th:if="${iterStat.index == 0}">
+                         <img th:src="@{/{imagePath}(imagePath=${image.imagePath})}" alt="Main Image" class="main-image">
+                    </div>
+                    <div class="side-images">
+                        <div th:each="image, iterStat : ${imagePath}" th:if="${iterStat.index == 1}">
+                           <img src="@{/{imagePath}(imagePath=${image.imagePath})}" alt="Side Image 1">
+                        </div>
+                        <div th:each="image, iterStat : ${imagePath}" th:if="${iterStat.index == 2}">
+                            <img src="@{/{imagePath}(imagePath=${image.imagePath})}" alt="Side Image 2">
+                        </div>
+                        <div th:each="image, iterStat : ${imagePath}" th:if="${iterStat.index == 3}">
+                            <img src="@{/{imagePath}(imagePath=${image.imagePath})}" alt="Side Image 3">
+                        </div>
+                        <div th:each="image, iterStat : ${imagePath}" th:if="${iterStat.index == 4}">
+                            <img src="@{/{imagePath}(imagePath=${image.imagePath})}" alt="Side Image 4">
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+
+                <!-- Details Section -->
+                <div class="details" th:each="listing : ${houseListing}">
+                    <h2 th:text="${houseListing.name}"></h2>
+
+                    <div class="address">
+                       <i class="fas fa-map-marker-alt"></i>
+                        <p th:text="${houseListing.address}"><br></p>
+                    </div>
+
+                    <div class="host-info">
+                        <div class="user">
+                           <p th:text="'Stay with ' + ${listing.hostDetails.firstName}"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-container" th:each="listing : ${houseListing}">
+                    <div class="info-section">
+                        <h3>About this place</h3>
+                        <p th:text="${listing.description}">NKUDWQBYDHEFJWREWF <br> CWEBBOUDOWYQCREEFRIHDBREFVWEC DKWYHQW hwxdfiefungvknvwdfrbfhwgiajcfwqpfiueouvoanildkeebdvhedfhaihdkerfakwv fjed.efnwkE FHFhqfnvihjg</p>
+                        <p>Show more</p>
+                    </div>
+
+                     <!-- Right Column (Check-in/Out/Guest/Reserve Card) -->
+            <div class="right-column">
+                <div class="checkin-card">
+                    <div class="checkin-checkout-container">
+                        <div class="checkin-section">
+                            <p>Check In</p>
+                            <input type="date" id="checkinDate" name="checkinDate">
+                        </div>
+                        <div class="separator"></div>
+                        <div class="checkout-section">
+                            <p>Check Out</p>
+                            <input type="date" id="checkoutDate" name="checkoutDate">
+                        </div>
+                    </div>
+                    <div class="separator"></div>
+                    <div class="guest-section">
+                        <p>Guests</p><br><p th:text="${listing.maxGuests} + 'guest(s)'"></p>
+                    </div>
+
+                    <button>Reserve</button>
+                </div>
+            </div>
+</div>
+
+                    <div th:each="listing : ${houseListing}" class="info-section" >
+                        <h3>What this place offers</h3>
+                        <ul class="amenities" th:each="offering : ${listing.offerings}">
+                            <li th:text="${offering}"></li>
+                        </ul>
+                        <button class="show-all-amenities-button">show all amenities</button>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+
+    <script>
+        // JavaScript to handle date input clicks
+        document.addEventListener('DOMContentLoaded', function() {
+            // No need for extra click handling as  provides a calendar
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients</title>
+    <link rel="stylesheet" href="/css/cli.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="page-container">
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="profile-picture" style="background-color: #ccc;"></div>
+                <h3 class="user-name">Kemi Adewole</h3>
+            </div>
+            <nav>
+                <a href="#" ><span>🏠</span> Properties</a>
+                <a href="#" class="active"><span>👥</span> Clients</a>
+                <a href="#"><span>⚙️</span> Settings</a>
+            </nav>
+            <button class="logout-btn" style="margin-top: auto;">Log out</button>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Clients</h1>
+                <div class="header-actions">
+                    <a href = "add.html"><button class="add-apartment-button">Add new apartment</button></a>
+                    <div class="location-filter">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table id="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Check In & Out</th>
+                                <th>Status</th>
+                                <th>Property Name</th>
+                                <th>Request</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-table-body">
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                    <div id="no-clients-message" style="display:none;">No clients yet.</div>
+                </div>
+
+                <div id="booking-details" style="display:none;">
+                    <h2>Booking Details</h2>
+                    <div id="booking-details-content">
+                        <!-- Booking details will be inserted here -->
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/clientpage.js"></script>
+</body>
+</html>

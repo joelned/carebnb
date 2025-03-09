@@ -1,7 +1,6 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.DTOs.DetailsDTO;
-import com.example.demo.DTOs.RefugeeProjection;
 import com.example.demo.Models.RefugeeDetails;
 import com.example.demo.Models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +15,7 @@ public interface RefugeeRepository extends JpaRepository<RefugeeDetails, Integer
             "FROM RefugeeDetails r " +
             "JOIN r.userEntity u " +
             "WHERE u = :userEntity")
-    List<DetailsDTO> findByUserEntity(UserEntity userEntity);
+    List<DetailsDTO> findRefugeeByUserEntity(UserEntity userEntity);
+
+    RefugeeDetails findByUserEntity(UserEntity userEntity);
 }

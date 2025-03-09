@@ -29,7 +29,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -112,7 +111,8 @@ public class AuthenticationTests {
     @Test
     void registrationSuccessful() throws Exception{
         //Arrange
-        doNothing().when(userService).registerUser(anyString(), anyString(), anyString());
+        doNothing().when(userService).registerUser(anyString(), anyString(), anyString(), anyString(),
+                anyString(), anyString());
 
         //Act
         ResultActions response = mockMvc.perform(post("/api/v1/auth/refugee/register")
@@ -124,14 +124,15 @@ public class AuthenticationTests {
                 .andExpect(content().string("Registration Successful"));
 
         verify(userService, times(1)).registerUser(registerDTO.getUsername(),
-                registerDTO.getPassword(), "refugee");
+                registerDTO.getPassword(), "refugee", registerDTO.getFirstName(),
+                registerDTO.getLastName(), registerDTO.getEmail());
     }
 
     @Test
     void registrationConflict() throws Exception{
         //Arrange
         doThrow(new IllegalArgumentException("Username Already Exists")).when(userService).registerUser(
-                anyString(), anyString(), anyString()
+                anyString(), anyString(), anyString(), anyString(), anyString(), anyString()
         );
 
         //Act
@@ -144,7 +145,8 @@ public class AuthenticationTests {
 
         //Assert
         verify(userService, times(1)).registerUser(registerDTO.getUsername(),
-                registerDTO.getPassword(), "refugee");
+                registerDTO.getPassword(), "refugee", registerDTO.getFirstName(),
+                registerDTO.getLastName(), registerDTO.getEmail());
     }
 
     @Test

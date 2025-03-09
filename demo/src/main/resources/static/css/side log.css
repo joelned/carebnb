@@ -1,0 +1,204 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* Left Sidebar */
+.sidebar {
+    width: 40%;
+    max-width: 400px;
+    position: fixed; /* Fix the sidebar */
+    height: 100vh; /* Make it full height */
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.sidebar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire area */
+    object-position: center; /* Center the image */
+}
+
+.sidebar .quote {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    font-style: italic;
+    font-size: 1.3em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    width: 80%;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increased shadow intensity */
+    border-radius: 10px;
+    margin: 20px;
+    margin-left: 420px; /* Account for fixed sidebar width + margin */
+}
+
+/* Header - Heading and Profile Upload */
+.main-content .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    top: 0; /* Stick to the top */
+    background-color: #fff; /* Ensure header background is visible */
+    z-index: 10; /* Ensure header is above other content */
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.main-content h2 {
+    color: #333;
+    margin-bottom: 0;
+    text-align: left;
+    flex: 1;
+    font-size: 1.5em;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    margin-top: 20px; /* Reduced margin */
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.form-group > div {
+    width: 48%;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #FF5A5F;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 23px;
+    border: none;
+    border-radius: 15px;  /* Less rounded corners */
+    background-color: #EEEAF0; /* lighter gray */
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #555;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 10px; /* Reduced padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtler shadow */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+textarea {
+    resize: vertical;
+    padding-right: 10px;
+    background-image: none; /* Remove arrow */
+    border-radius: 15px; /* more rounded corners */
+}
+
+/* Remove arrow from name and email */
+input#name,
+input#email,
+input#languages {
+    background-image: none !important;
+}
+
+textarea {
+    width: 100%; /* Make textarea full width */
+    margin-top: 10px; /* Add some space */
+}
+
+/* Profile Upload */
+.profile-upload {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-upload input[type="file"] {
+    position: absolute;
+    font-size: 100px;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#upload-label {
+    display: none;
+}
+
+/* Done Button Styling */
+#done-button {
+    background-color: #FF5A5F;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 25px;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    width: 100%; /* make the button take the entire width */
+}
+
+#done-button:hover {
+    background-color: #cc474b; /* Darker shade on hover */
+}
+
+/* Active/Focus state */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none; /* Remove the default outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* A subtle shadow on focus */
+    border: none;
+}

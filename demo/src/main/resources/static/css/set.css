@@ -1,0 +1,196 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+	height:100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #D9D9D9;
+    padding: 20px;
+    height: 100vh; /* Ensure full height */
+    display: flex;
+    flex-direction: column;
+	overflow: hidden;
+}
+
+.profile-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: auto;
+    background-size: cover;
+}
+
+.user-name {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.sidebar nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar nav a {
+    display: block;
+    padding: 13px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 0px;
+}
+
+.sidebar nav a.active {
+    color: #FF5A5F;
+    border-left: 5px solid #F44336;
+}
+
+.sidebar nav a span {
+    margin-right: 10px;
+    color: #FF5A5F;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 60px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+/*.logout-btn:hover {
+    background-color: #ccc;
+}*/
+
+.main-content-wrapper {
+    flex: 1;
+    margin-left: 4px; /* Ensure content starts after sidebar */
+    padding: 60px;
+}
+
+.settings {
+    background: white;
+    border-radius: 10px;
+    margin: 0px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    height: 90vh; /* Ensure full height */
+    padding: 10px 25px 20px 25px;
+    overflow-y: auto; /* Add scrollbar if needed */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-apartment {
+    background: #FF5A5F;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #FF5A5F;
+}
+
+input, textarea {
+    padding: 14px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 80%;
+    font-size: 16px;
+    background:#EEEAF0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+/* Toggle Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #FF5A5F;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Align toggles to the left */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.left-align {
+    justify-content: flex-start;
+    gap: 15px;
+}

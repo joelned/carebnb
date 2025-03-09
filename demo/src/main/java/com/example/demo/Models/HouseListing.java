@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,10 +19,10 @@ public class HouseListing {
     private String description;
     private int maxGuests;
     private String address;
-    private double rating;
-    private int noOfReviews;
     @ManyToOne
     @JoinColumn(name = "host_id")
     private HostDetails hostDetails;
     private List<String> offerings;
+    @OneToMany(mappedBy = "houseListing", cascade=CascadeType.ALL)
+    private List<HouseListingImages> listingImages = new ArrayList<>();
 }

@@ -1,9 +1,9 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.DTOs.DetailsDTO;
-import com.example.demo.DTOs.RefugeeProjection;
-import com.example.demo.Models.RefugeeDetails;
+import com.example.demo.Models.HouseListing;
 import com.example.demo.Models.UserEntity;
+import com.example.demo.Repositories.ListingRepository;
 import com.example.demo.Repositories.RefugeeRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.ListingService;
@@ -29,6 +29,9 @@ public class RefugeeController {
     @Autowired
     private ListingService listingService;
 
+    @Autowired
+    private ListingRepository listingRepository;
+
     private final Logger logger = LoggerFactory.getLogger(RefugeeController.class);
 
     @Transactional
@@ -47,8 +50,14 @@ public class RefugeeController {
     @GetMapping("/details")
     public ResponseEntity<List<DetailsDTO>>getRefugeeDetails(Principal principal){
         UserEntity user = userRepository.findByUsername(principal.getName());
-        List<DetailsDTO> refugeeDetails = refugeeRepository.findByUserEntity(user);
+        List<DetailsDTO> refugeeDetails = refugeeRepository.findRefugeeByUserEntity(user);
         return new ResponseEntity<>(refugeeDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("/listing")
+    public ResponseEntity<List<HouseListing>>getListing(){
+        List<HouseListing> listings = listingRepository.findAll();
+        return new ResponseEntity<>(listings, HttpStatus.OK);
     }
 
 }
