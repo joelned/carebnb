@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/css/**", "/js/**",
                                 "/images/**", "/", "/signup",
                                 "/signup/**", "/favicon.ico", "/login", "/get-started",
-                                "/api/v1/auth/register", "/home", "/error").permitAll()
+                                "/api/v1/auth/register", "/error").permitAll()
                         .anyRequest().authenticated())
 
                  .oauth2ResourceServer(oauth -> oauth

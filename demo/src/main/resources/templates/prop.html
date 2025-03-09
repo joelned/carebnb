@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,13 +13,18 @@
     <div class="container">
         <aside class="sidebar">
             <div class="profile-section">
-                <div class="profile-picture" style="background-color: #ccc;"></div>
-                <h3 class="user-name">Kemi Adewole</h3>
+                <div th:if="${hostName != null}">
+                    <h3 th:text="${hostName}" class="user-name"></h3>
+                </div>
+                <div th:if="${hostName == null}">
+                    <h3 class="user-name"></h3>
+                </div>
+
             </div>
             <nav>
-                <a href="#" class="active"><span>🏠</span> Properties</a>
-                <a href="#"><span>👥</span> Clients</a>
-                <a href="#"><span>⚙️</span> Settings</a>
+                <a th:href="@{/properties}"><span>🏠</span> Properties</a>
+                <a th:href= "@{/clients}"><span>👥</span> Client</a>
+                <a th:href="@{/host-settings}" class="active"><span>⚙️</span> Settings</a>
             </nav>
             <button class="logout-btn" style="margin-top: auto;">Log out</button>
         </aside>
@@ -28,26 +33,29 @@
             <header>
                 <h1>My Properties</h1>
                 <div class="header-buttons">
-                    <button id="add-property-button">+ Add new apartment</button>
-                    <div class="location-filter">
-                        <select id="location-select">
-                            <option value="">Location</option>
-                            <option value="ikeja">Ikeja</option>
-                            <option value="lekki">Lekki</option>
-                            <option value="yaba">Yaba</option>
-                            <!-- Add more locations as needed -->
-                        </select>
-                    </div>
+                    <a th:href="@{/create-listing}"><button id="add-property-button">+ Add new apartment</button></a>
                 </div>
             </header>
 
-            <section id="properties-grid" class="properties-grid">
-                <!-- Properties will be displayed here -->
+            <div>
+            <section id="properties-grid" th:if="${houseListings != null}" class="properties-grid" th:each="listing : ${houseListings}">
+                <div class="property-card">
+                    <img th:src="${listing.listingImages[0].imagePath}" alt="First Property" />
+                    <h3 th:text="${listing.name}"></h3>
+                    <div class="location">
+                        <span class="candy-location-icon" style="background-color: #FF5A5F;"></span>
+                        <p>[[${listing.address}]]</p>
+                    </div>
+                    <div class="actions">
+                        <button class="details" style="color: #FF5A5F">View Details</button>
+                    </div>
+                </div>
             </section>
+                <section id="no-properties" class="no-properties" th:if="${houseListings == null}">
+                    <p>No properties uploaded yet.</p>
+                </section>
+            </div>
 
-            <section id="no-properties" class="no-properties">
-                <p>No properties uploaded yet.</p>
-            </section>
         </main>
     </div>
 

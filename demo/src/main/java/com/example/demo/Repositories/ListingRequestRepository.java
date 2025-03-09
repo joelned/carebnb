@@ -20,6 +20,13 @@ public interface ListingRequestRepository extends JpaRepository<ListingRequest, 
     @Query("UPDATE ListingRequest lr SET lr.approved = true WHERE lr.listingRequestId = :listingRequestId")
     void approveListingRequest(@Param("listingRequestId")int listingRequestId);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE ListingRequest lr SET lr.approved = false WHERE lr.listingRequestId = :listingRequestId")
+    void rejectListingRequest(@Param("listingRequestId")int listingRequestId);
+
+
+
     @Query("SELECT new com.example.demo.DTOs.RefugeeProjection(r.name, lr.checkIn, lr.checkOut, r.age, r.email, r.gender, r.dependents, " +
             "r.countryOfOrigin, r.countryOfFlee, r.preferredLocation, r.specialNeeds, r.selfDescription," +
             "hl.name) " +

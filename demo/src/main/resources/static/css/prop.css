@@ -161,7 +161,7 @@ header h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
     width: 305px;
-    height: 311px;
+    min-height: 311px;
     box-sizing: border-box;
 }
 
@@ -179,7 +179,7 @@ header h1 {
 
 .property-card h3 {
     margin-top: 0;
-    margin-bottom: 8px;
+    margin-bottom: 1px;
     font-size: 1em;
     font-weight: 600;
     color: #222;
@@ -188,7 +188,6 @@ header h1 {
 .property-card .actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
 }
 
 .property-card .actions button {
@@ -225,7 +224,6 @@ header h1 {
     gap: 5px;
     font-size: 0.8em;
     color: #777;
-    margin-top: 10px;
 }
 
 /* No Properties State */

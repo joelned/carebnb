@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,134 +7,93 @@
     <link rel="stylesheet" href="/css/newset.css">
 </head>
 <body>
-    <div class="settings-container">
-        <aside class="sidebar">
-            <div class="profile-section">
-                <label for="profilePictureInput">
-                    <div class="profile-picture" id="profilePicture"></div>
-                </label>
-                <input type="file" id="profilePictureInput" style="display: none;">
-                <h3 class="user-name">Olena Petro</h3>
+<div class="settings-container">
+    <aside class="sidebar">
+        <div class="profile-section">
+            <label for="profilePictureInput">
+                <div class="profile-picture" id="profilePicture">
+                    <img src="/images/bedroom.jpg" id="profilePictureInput" style="display: none;" >
+                </div>
+            </label>
+            <!-- File input will be disabled in Thymeleaf -->
+            <h3 class="user-name" th:text="${refugeeDetails.name}"></h3>
+        </div>
+        <nav>
+            <a th:href="@{/refugee-settings}" class="active"><span>⚙️</span> Settings</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn" disabled>Log out</button>
+        </div>
+    </aside>
+
+    <main class="settings-content">
+        <h2>Settings</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="name" th:value="${refugeeDetails.name}" readonly>
             </div>
-            <nav>
-                <a href="#" class="active"><span>⚙️</span> Settings</a>
-            </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn">Log out</button>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="age" min="0" th:value="${refugeeDetails.age}" readonly>
             </div>
-        </aside>
+        </div>
 
-        <main class="settings-content">
-            <h2>Settings</h2>
-            <form id="settingsForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" id="name" value="Olena Petro">
-                    </div>
-                    <div class="form-group">
-                        <label>Age</label>
-                        <input type="number" id="age" min="0" value="48">
-                    </div>
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" th:value="${refugeeDetails.email}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <input type="text" id="gender" th:value="${refugeeDetails.gender}" readonly>
+            </div>
+        </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="email" value="olenapetro2@gmail.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Gender</label>
-                        <select id="gender">
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Number of Dependents</label>
+                <input type="number" id="dependents" th:value="${refugeeDetails.dependents}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Country of Origin</label>
+                <input type="text" id="origin" th:value="${refugeeDetails.countryOfOrigin}" readonly>
+            </div>
+        </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Number of Dependents</label>
-                        <select id="dependents">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Country of Origin</label>
-                        <select id="origin">
-                            <option>Afghanistan</option>
-                            <option>Syria</option>
-                            <option>Iraq</option>
-                            <option>Ukraine</option>
-                            <option>Venezuela</option>
-                            <!-- Add more countries as needed -->
-                        </select>
-                    </div>
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Country of Flee</label>
+                <input type="text" id="flee" th:value="${refugeeDetails.countryOfFlee}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Languages Spoken</label>
+                <input type="text" id="language" th:value="${refugeeDetails.languagesSpoken}" readonly>
+            </div>
+        </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Country of Flee</label>
-                        <select id="flee">
-                            <option>USA</option>
-                            <option>Canada</option>
-                            <option>Germany</option>
-                            <option>France</option>
-                            <option>UK</option>
-                            <option>Poland</option>
-                            <option>Ukraine</option>
-                            <!-- Add more countries as needed -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Languages Spoken</label>
-                        <input type="text" id="language" placeholder="e.g., English, Spanish">
-                    </div>
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Preferred Location</label>
+                <input type="text" id="location" th:value="${refugeeDetails.preferredLocation}" readonly>
+            </div>
+            <div class="form-group">
+                <label>Special Needs</label>
+                <input type="text" id="needs" th:value="${refugeeDetails.specialNeeds}" readonly>
+            </div>
+        </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Preferred Location</label>
-                        <select id="location">
-                            <option>Ikeja</option>
-                            <option>Victoria Island</option>
-                            <option>Lekki</option>
-                            <option>Surulere</option>
-                            <option>Yaba</option>
-                            <!-- Add more locations as needed -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Special Needs</label>
-                        <select id="needs">
-                            <option>None</option>
-                            <option>Walking Disability</option>
-                            <option>Visual Impairment</option>
-                            <option>Hearing Impairment</option>
-                            <option>Dietary Restrictions</option>
-                            <option>Other</option>
-                            <!-- Add more special needs options as needed -->
-                        </select>
-                    </div>
-                </div>
+        <div class="form-group toggle-container">
+            <label>Profile Visibility</label>
+            <label class="switch">
+                <input type="checkbox" id="visibility" disabled>
+                <span class="slider round"></span>
+            </label>
+        </div>
 
-                <div class="form-group toggle-container">
-                    <label>Profile Visibility</label>
-                    <label class="switch">
-                        <input type="checkbox" id="visibility">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+    </main>
+</div>
 
-                <button type="submit" class="save-btn">Save Changes</button>
-            </form>
-        </main>
-    </div>
-
-    <script src="/js/newset.js"></script>
+<script src="/js/newset.js"></script>
 </body>
 </html>

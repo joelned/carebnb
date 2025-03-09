@@ -17,5 +17,7 @@ public interface RefugeeRepository extends JpaRepository<RefugeeDetails, Integer
             "WHERE u = :userEntity")
     List<DetailsDTO> findRefugeeByUserEntity(UserEntity userEntity);
 
+    RefugeeDetails findByUserEntityUsername(String username);
+
     RefugeeDetails findByUserEntity(UserEntity userEntity);
 }

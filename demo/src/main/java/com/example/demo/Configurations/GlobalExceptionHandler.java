@@ -24,6 +24,11 @@ public class GlobalExceptionHandler {
        return "redirect:/login";
     }
 
+    @ExceptionHandler(NullPointerException.class)
+    public String handleNullPointerException(NullPointerException ex){
+        return "redirect:/login";
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public String handleAuthenticationException(AuthenticationException ex, Model model){
         model.addAttribute("error", "Authentication Failed");

@@ -1,15 +1,16 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Models.HouseListing;
-import com.example.demo.Models.HouseListingImages;
+import com.example.demo.Models.*;
+import com.example.demo.Repositories.HostRepository;
 import com.example.demo.Repositories.ListingImagesRepository;
 import com.example.demo.Repositories.ListingRepository;
+import com.example.demo.Repositories.RefugeeRepository;
 import com.example.demo.Services.ListingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +29,12 @@ public class PageController implements ErrorController {
     private ListingRepository listingRepository;
 
     @Autowired
+    private RefugeeRepository refugeeRepository;
+    @Autowired
     private ListingImagesRepository imagesRepository;
 
+    @Autowired
+    private HostRepository hostRepository;
     @Autowired
     private ListingService listingService;
     @GetMapping("/")
@@ -91,19 +95,37 @@ public class PageController implements ErrorController {
         return "add";
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_HOST')")
+    @PreAuthorize("hasAuthority('SCOPE_REFUGEE')")
     @GetMapping("/refugee-settings")
-    public String refugeeSettings(){
+    public String refugeeSettings(HttpSession session, Model model){
+        String username = (String)session.getAttribute("username");
+        RefugeeDetails refugeeDetails = refugeeRepository.findByUserEntityUsername(username);
+
+        if(refugeeDetails == null){
+            return "redirect:/login";
+        }
+
+       model.addAttribute("refugeeDetails", refugeeDetails);
         return "newset";
     }
 
 
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
     @GetMapping("/host-settings")
-    public String hostSettings(){
+    public String hostSettings(HttpSession session, Model model){
+        String username = (String) session.getAttribute("username");
+        HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
+
+        if(hostDetails == null){
+            return "redirect:/login";
+        }
+        String hostName = hostDetails.getFirstName() + " " + hostDetails.getLastName();
+        model.addAttribute("hostName", hostName);
+        model.addAttribute("hostDetails", hostDetails);
         return "set";
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_HOST')")
     @GetMapping("/create-listing")
     public String createListing(){
         return "add";
@@ -136,6 +158,42 @@ public class PageController implements ErrorController {
             // In case of an error, redirect to the home page
             return "redirect:/home";
         }
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_HOST')")
+    @GetMapping("/clients")
+    public String clients(HttpSession session, Model model){
+        String username = (String) session.getAttribute("username");
+        HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
+
+        if(hostDetails == null){
+            return "redirect:/login";
+        }
+
+        String hostName = hostDetails.getFirstName() + " " + hostDetails.getLastName();
+        model.addAttribute("hostName", hostName);
+        model.addAttribute("hostDetails", hostDetails);
+
+        return "cli";
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_HOST')")
+    @GetMapping("/properties")
+    public String properties(HttpSession session, Model model){
+        String username = (String)session.getAttribute("username");
+        HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
+
+        List<HouseListing> houseListings = listingRepository.findByHostDetails(hostDetails);
+
+        String hostName = hostDetails.getFirstName() + " " + hostDetails.getLastName();
+        if(houseListings.isEmpty()){
+            model.addAttribute("hostName", hostName);
+            return "prop";
+        }
+
+        model.addAttribute("hostName", hostName);
+        model.addAttribute("houseListings", houseListings);
+        return "prop";
     }
 
 }

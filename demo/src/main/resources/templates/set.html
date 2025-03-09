@@ -11,16 +11,12 @@
     <div class="container">
         <aside class="sidebar">
             <div class="profile-section">
-                <label for="profilePictureInput">
-                    <div class="profile-picture" id="profilePicture"></div>
-                </label>
-                <input type="file" id="profilePictureInput" style="display: none;">
-                <h3 class="user-name" id="sidebar-name">Kemi Adewole</h3>
+                <h3 th:text= "${hostName}" class="user-name" id="sidebar-name"></h3>
             </div>
             <nav>
-                <a href="#" ><span>🏠</span> Properties</a>
-                <a th:href= "@{/clients}" span>👥</span> Client</a>
-                <a href="#" class="active"><span>⚙️</span> Settings</a>
+                <a th:href="@{/properties}" ><span>🏠</span> Properties</a>
+                <a th:href= "@{/clients}"><span>👥</span> Client</a>
+                <a th:href="@{/host-settings}" class="active"><span>⚙️</span> Settings</a>
             </nav>
             <button class="logout-btn" style="margin-top: auto;">Log out</button>
         </aside>
@@ -34,11 +30,11 @@
                 <form>
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" id="name-input" value="Kemi Adewole" readonly>
+                        <input type="text" id="name-input" th:value="${hostName}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" value="kemiadewole2@gmail.com" readonly>
+                        <input type="email" th:value="${hostDetails.email}" readonly>
                     </div>
 
                     <div class="toggle-container left-align">

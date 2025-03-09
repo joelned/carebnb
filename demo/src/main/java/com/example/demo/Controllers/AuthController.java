@@ -58,9 +58,9 @@ public class AuthController {
     public String register(@PathVariable String role,
                            @RequestParam String username,
                            @RequestParam String password,
-                           @RequestParam String email,
-                           @RequestParam String firstName,
-                           @RequestParam String lastName, Model model, HttpSession httpSession,
+                           @RequestParam(required = false) String email,
+                           @RequestParam(required = false)String firstName,
+                           @RequestParam(required = false) String lastName, Model model, HttpSession httpSession,
                             RedirectAttributes redirectAttribute
     ) {
         try {

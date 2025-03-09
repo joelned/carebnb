@@ -36,7 +36,7 @@ public class CookieAuthenticationFilter extends AbstractAuthenticationProcessing
         Set<String> uriContainsRoutes = Set.of("/api/v1/auth/login", "/js/",
                 "/css/", "/images/","/signup/refugee", "/signup/host", "/api/v1/auth/register");
         Set<String> equals = Set.of("/favicon.ico", "/login","/get-started", "/", "/welcome",
-                "/error", "/signup", "/home");
+                "/error", "/signup");
         boolean uriContains = uriContainsRoutes.stream().anyMatch(URI::contains);
         boolean uriEquals = equals.stream().anyMatch(URI::equals);
 

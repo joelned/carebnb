@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Add selected offerings to formData
-        formData.append('offerings[]', offeringItems.join(', '));
+        formData.append('offerings', offeringItems.join(', '));
 
         // Perform the fetch request with the formData
         fetch(form.action, {
