@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +35,9 @@ public class CookieAuthenticationFilter extends AbstractAuthenticationProcessing
     public boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String URI = request.getRequestURI();
         Set<String> uriContainsRoutes = Set.of("/api/v1/auth/login", "/js/",
-                "/css/", "/images/","/signup/refugee", "/signup/host", "/api/v1/auth/register");
+                "/css/", "/Pictures/","/listing-details/",
+                "/images/","/signup/refugee", "/signup/host", "/api/v1/auth/register");
+
         Set<String> equals = Set.of("/favicon.ico", "/login","/get-started", "/", "/welcome",
                 "/error", "/signup");
         boolean uriContains = uriContainsRoutes.stream().anyMatch(URI::contains);
@@ -56,9 +59,8 @@ public class CookieAuthenticationFilter extends AbstractAuthenticationProcessing
             throw new AuthenticationException("No Jwt Found in Cookie") {
             };
         }
-        Jwt jwt = jwtDecoder.decode(token);
-        return jwtAuthenticationConverter.convert(jwt);
-
+            Jwt jwt = jwtDecoder.decode(token);
+            return jwtAuthenticationConverter.convert(jwt);
     }
 
     private String getJwtFromCookie(HttpServletRequest request) {
@@ -76,7 +78,6 @@ public class CookieAuthenticationFilter extends AbstractAuthenticationProcessing
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
         SecurityContextHolder.getContext().setAuthentication(authResult);
-        System.out.println(SecurityContextHolder.getContext());
         chain.doFilter(request, response);
     }
 

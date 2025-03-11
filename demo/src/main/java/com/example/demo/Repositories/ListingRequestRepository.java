@@ -37,4 +37,6 @@ public interface ListingRequestRepository extends JpaRepository<ListingRequest, 
     List<RefugeeProjection> findRefugeeDetailsByHostDetails(@Param("hostDetails") HostDetails hostDetails);
 
     ListingRequest findByListingRequestId(int listingRequestId);
+
+    List<ListingRequest> findByHostDetails(HostDetails hostDetails);
 }

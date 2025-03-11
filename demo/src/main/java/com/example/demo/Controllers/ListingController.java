@@ -6,6 +6,7 @@ import com.example.demo.Models.HouseListing;
 import com.example.demo.Models.HouseListingImages;
 import com.example.demo.Repositories.*;
 import com.example.demo.Services.ListingService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -61,19 +61,38 @@ public class ListingController {
     }
 
     @PostMapping("/approve-request")
-    public ResponseEntity<Object>approveRequest(Principal principal, @RequestParam("listingRequestId") int listingRequestId){
+    public String approveRequest(HttpSession session, @RequestParam("listingRequestId") int listingRequestId){
         try{
-            listingService.approveListing(principal, listingRequestId);
-            logger.info("Listing Request approved by HOST {}", principal.getName());
-            listingService.sendMail(principal, listingRequestId);
-            ApprovalResponse approvalResponse = new ApprovalResponse("Request Accepted",
-                    true, LocalDateTime.now());
-            return ResponseEntity.ok(approvalResponse);
+            String username = (String)session.getAttribute("username");
+            listingService.approveListing(listingRequestId);
+
+            logger.info("Listing Request approved by HOST {}", username);
+
+            listingService.sendMail(session, listingRequestId);
+            logger.info("Email Sent at {}", LocalDateTime.now());
+
+            return "redirect:/clients";
         }
         catch(Exception ex){
-            logger.info("Attempt to approve listing request failed: {}", ex.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), LocalDateTime.now());
-            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+            return "redirect:/clients";
+        }
+    }
+
+    @PostMapping("/decline-request")
+    public String declineRequest(HttpSession session, @RequestParam("refugeeName") String refugeeName,
+    @RequestParam("listingRequestId") int listingRequestId) {
+        try{
+           String username = (String)session.getAttribute("username");
+           listingService.declineRequest(listingRequestId);
+
+           logger.info("Listing Request declined by HOST {}", username);
+
+           listingService.sendDeclineMail(session, listingRequestId, refugeeName);
+           return "redirect:/clients";
+        }
+        catch(Exception ex){
+            logger.error("Error declining request {}", ex.getMessage());
+            return "redirect:/clients";
         }
     }
 

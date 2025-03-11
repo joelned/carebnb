@@ -20,7 +20,7 @@
                 <a th:href= "@{/clients}"><span>👥</span> Client</a>
                 <a th:href="@{/host-settings}" class="active"><span>⚙️</span> Settings</a>
             </nav>
-            <button class="logout-btn" style="margin-top: auto;">Log out</button>
+            <a th:href="@{/logout}"><button class="logout-btn" style="margin-top: auto;">Log out</button></a>
         </aside>
 
         <main class="main-content">
@@ -30,7 +30,7 @@
                     <a th:href="@{/create-listing}"><button class="add-apartment-button">Add new apartment</button></a>
                     <div class="location-filter">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search...">
+                        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search...">
                     </div>
                 </div>
             </header>
@@ -48,28 +48,30 @@
                             </tr>
                         </thead>
                         <tbody id="clients-table-body">
-                            <!-- Data will be inserted here -->
-                            <tr>
-                                <td>John Doe</td>
-                                <td>01/01/2025 - 01/07/2025</td>
-                                <td>Approved</td>
-                                <td>Luxury 2-Bedroom Apartment</td>
+                            <tr th:each="request : ${requests}">
+                                <td th:text="${request.refugeeDetails.name}"></td>
+                                <td th:text="${request.checkIn} + ' ' + ' - ' + ${request.checkOut}"></td>
+                                <div th:if="${request.approved}">
+                                    <td>Approved</td>
+                                </div>
+                                <div th:unless="${request.approved}">
+                                   <td>Pending</td>
+                                </div>
+                                <td th:text="${request.houseListing.name}"></td>
                                 <td>
-                                    <div class="request-buttons">
-                                        <a><button class="like-button">👍</button></a>
-                                        <a><button class="dislike-button">👎</button></a>
+                                    <div class="request-buttons" th:unless="${request.approved}">
+                                        <form th:action="@{/api/v1/approve-request}" method="post">
+                                            <button type="submit" class="like-button">👍</button>
+                                            <input type="hidden" name="listingRequestId" th:value="${request.listingRequestId}">
+                                        </form>
+                                        <form th:action="@{/api/v1/decline-request}" method="post">
+                                            <button type="submit" class="dislike-button">👎</button>
+                                            <input type="hidden" name="listingRequestId" th:value="${request.listingRequestId}">
+                                            <input type="hidden" name="refugeeName" th:value="${request.refugeeDetails.name}">
+                                        </form>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jane Smith</td>
-                                <td>15/01/2025 - 22/01/2025</td>
-                                <td>Pending</td>
-                                <td>Cozy Studio Apartment</td>
-                                <td>
-                                    <div class="request-buttons">
-                                        <button class="like-button">👍</button>
-                                        <button class="dislike-button">👎</button>
+                                    <div class="request-buttons" th:if="${request.approved}">
+                                        <button class="like-button">&#9989</button>
                                     </div>
                                 </td>
                             </tr>
@@ -81,7 +83,7 @@
                 <div id="booking-details" style="display:none;">
                     <h2>Booking Details</h2>
                     <div id="booking-details-content">
-                        <!-- Booking details will be inserted here -->
+                        <p><strong>Booking ID: </strong>#12345</p>
                     </div>
                     
                 </div>

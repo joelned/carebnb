@@ -26,7 +26,7 @@ public class HostController {
     @Autowired
     private ListingService listingService;
 
-   Logger logger = LoggerFactory.getLogger(HostController.class);
+   private final Logger logger = LoggerFactory.getLogger(HostController.class);
 
     @PostMapping("/create-listing")
     public void uploadListing(
@@ -41,6 +41,8 @@ public class HostController {
             throws Exception {
         try{
             listingService.uploadListing(session, name, maxGuests, description, address, offerings, images);
+            String username = (String)session.getAttribute("username");
+            logger.info("{} created listing {} at {}", username, name, LocalDateTime.now());
         }
         catch(Exception ex){
             logger.error(ex.getMessage() + " " + LocalDateTime.now());

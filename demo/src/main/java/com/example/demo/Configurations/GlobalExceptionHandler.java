@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,11 @@ public class GlobalExceptionHandler {
        return "redirect:/login";
     }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public String requestMethodNotSupported(HttpRequestMethodNotSupportedException ex){
+        return "redirect:/login";
+    }
+
     @ExceptionHandler(NullPointerException.class)
     public String handleNullPointerException(NullPointerException ex){
         return "redirect:/login";
@@ -31,8 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public String handleAuthenticationException(AuthenticationException ex, Model model){
-        model.addAttribute("error", "Authentication Failed");
-        return "login";
+        return "redirect:/";
     }
     @ExceptionHandler(UsernameNotFoundException.class)
     public String handleUsernameNotFoundException(UsernameNotFoundException ex, Model model){

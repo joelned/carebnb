@@ -5,6 +5,7 @@ import com.example.demo.DTOs.RefugeeProjection;
 import com.example.demo.Models.ListingRequest;
 import com.example.demo.Repositories.*;
 import com.example.demo.Services.ListingService;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,8 @@ public class ListingTests {
         // Arrange
         int listingRequestId = 123;
 
-        doNothing().when(listingService).approveListing(any(Principal.class), eq(listingRequestId));
-        doNothing().when(listingService).sendMail(any(Principal.class), eq(listingRequestId));
+        doNothing().when(listingService).approveListing(eq(listingRequestId));
+        doNothing().when(listingService).sendMail(any(HttpSession.class), eq(listingRequestId));
 
         // Act
         ResultActions response = mockMvc.perform(post("/api/v1/approve-request")

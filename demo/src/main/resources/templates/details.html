@@ -18,12 +18,16 @@
                 <div class="logo">carebnb</div>
             </div>
             <div class="header-right">
-                <a href="#">Rent your home</a>
-                <a href="#"> <i class="fas fa-globe"></i> </a>
-                <a href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 11.37A7 7 0 0 0 8 1z"/>
-                  </svg></a>
+                <div th:if="${role} == 'HOST'">
+                    <a th:href="@{/create-apartment}" style="text-decoration: none; color: FF5A5F;"><span>Rent your home</span></a>
+                </div>
+                <i class="fas fa-globe"></i>
+                <div th:if="${role} == 'REFUGEE'">
+                    <a th:href="@{/refugee-settings}" style="text-decoration: none; color: FF5A5F;"><i class="fas fa-user-circle"></i></a>
+                </div>
+                <div th:if="${role} == 'HOST'">
+                    <a th:href="@{/host-settings}" style="text-decoration: none; color:FF5A5F;"><i class="fas fa-user-circle"></i></a>
+                </div>
             </div>
         </header>
 
@@ -109,25 +113,27 @@
 
                      <!-- Right Column (Check-in/Out/Guest/Reserve Card) -->
             <div class="right-column">
-                <div class="checkin-card">
-                    <div class="checkin-checkout-container">
-                        <div class="checkin-section">
-                            <p>Check In</p>
-                            <input type="date" id="checkinDate" name="checkinDate">
+                <form th:action="@{/apply}" method="post">
+                    <div class="checkin-card">
+                        <div class="checkin-checkout-container">
+                            <div class="checkin-section">
+                                <p>Check In</p>
+                                <input type="date" id="checkinDate" name="checkIn" required>
+                            </div>
+                            <div class="separator"></div>
+                            <div class="checkout-section">
+                                <p>Check Out</p>
+                                <input type="date" id="checkoutDate" name="checkOut" required>
+                            </div>
                         </div>
                         <div class="separator"></div>
-                        <div class="checkout-section">
-                            <p>Check Out</p>
-                            <input type="date" id="checkoutDate" name="checkoutDate">
+                        <div class="guest-section">
+                            <p>Guests</p><br><p th:text="${listing.maxGuests} + ' guest(s)'"></p>
                         </div>
+                        <input type="hidden" name="name" th:value="${listing.name}">
+                        <button type="submit">Reserve</button>
                     </div>
-                    <div class="separator"></div>
-                    <div class="guest-section">
-                        <p>Guests</p><br><p th:text="${listing.maxGuests} + 'guest(s)'"></p>
-                    </div>
-
-                    <button>Reserve</button>
-                </div>
+                </form>
             </div>
 </div>
 

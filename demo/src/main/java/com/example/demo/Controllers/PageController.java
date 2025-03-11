@@ -1,10 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Models.*;
-import com.example.demo.Repositories.HostRepository;
-import com.example.demo.Repositories.ListingImagesRepository;
-import com.example.demo.Repositories.ListingRepository;
-import com.example.demo.Repositories.RefugeeRepository;
+import com.example.demo.Repositories.*;
 import com.example.demo.Services.ListingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -35,27 +32,37 @@ public class PageController implements ErrorController {
 
     @Autowired
     private HostRepository hostRepository;
+
+    @Autowired
+    private ListingRequestRepository listingRequestRepository;
     @Autowired
     private ListingService listingService;
-    @GetMapping("/")
-    public String root(){
-        return "redirect:/login";
-    }
+
     @GetMapping("/signup")
     public String index(){
         return "index";
     }
 
-    @GetMapping("/home")
-    public String home(Model model, HttpSession session) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && authentication.isAuthenticated()) {
-            String role = (String)session.getAttribute("role");
+    @GetMapping("/")
+    public String basePage(Model model, HttpSession session) {
             List<HouseListingImages> listingImages = imagesRepository.findAll();
             List<HouseListing> listings = listingRepository.findAll();
             model.addAttribute("houseListings", listings);
             model.addAttribute("listingImages", listingImages);
+            return "home";
+    }
+
+    @GetMapping("/home")
+    public String home(Model model, HttpSession session){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication.isAuthenticated()){
+            String role = (String)session.getAttribute("role");
+            List<HouseListingImages> listingImages = imagesRepository.findAll();
+            List<HouseListing> listings = listingRepository.findAll();
+            model.addAttribute("houseListings", listings);
             model.addAttribute("role", role);
+            model.addAttribute("listingImages", listingImages);
             return "home";
         }
         return "redirect:/login";
@@ -90,6 +97,7 @@ public class PageController implements ErrorController {
         return "redirect:/login";
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_HOST')")
     @GetMapping("/create-apartment")
     public String createApartment(){
         return "add";
@@ -141,7 +149,6 @@ public class PageController implements ErrorController {
                 throw new Exception("Listing not found");
             }
 
-            // Clean up image path (remove /listing-details if included)
             for (HouseListingImages image : imagesForListing) {
                 String imagePath = image.getImagePath();
                 // Remove the '/listing-details' prefix, if present
@@ -153,7 +160,7 @@ public class PageController implements ErrorController {
             model.addAttribute("imagesForListing", imagesForListing);
             model.addAttribute("houseListing", houseListing.get());
 
-            return "details"; // Use the appropriate name for your view template
+            return "details";
         } catch (Exception ex) {
             // In case of an error, redirect to the home page
             return "redirect:/home";
@@ -166,13 +173,16 @@ public class PageController implements ErrorController {
         String username = (String) session.getAttribute("username");
         HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
 
+
         if(hostDetails == null){
             return "redirect:/login";
         }
 
+        List<ListingRequest> requests = listingRequestRepository.findByHostDetails(hostDetails);
         String hostName = hostDetails.getFirstName() + " " + hostDetails.getLastName();
         model.addAttribute("hostName", hostName);
         model.addAttribute("hostDetails", hostDetails);
+        model.addAttribute("requests", requests);
 
         return "cli";
     }
@@ -194,6 +204,11 @@ public class PageController implements ErrorController {
         model.addAttribute("hostName", hostName);
         model.addAttribute("houseListings", houseListings);
         return "prop";
+    }
+
+    @GetMapping("/access-denied")
+    public String accessDenied(){
+        return "accessdenied";
     }
 
 }

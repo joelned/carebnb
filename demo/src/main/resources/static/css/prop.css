@@ -62,7 +62,7 @@ body {
     color: #FF5A5F;
     /*background-color: #f2f2f2;*/
     border-radius: 5px;
-	border-left: 5px solid #F44336;
+    border-left: 5px solid #F44336;
 }
 
 .sidebar nav a span {
@@ -94,14 +94,13 @@ body {
 }
 
 header {
-	position:sticky;
-	top: 0;
-	z-index: 10; 
+    top: 0;
+    z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-	
+
 }
 
 header h1 {
@@ -179,7 +178,7 @@ header h1 {
 
 .property-card h3 {
     margin-top: 0;
-    margin-bottom: 1px;
+    margin-bottom: 8px;
     font-size: 1em;
     font-weight: 600;
     color: #222;
@@ -188,6 +187,7 @@ header h1 {
 .property-card .actions {
     display: flex;
     justify-content: space-between;
+    margin-top: 15px;
 }
 
 .property-card .actions button {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,8 +16,8 @@
             <br>
             <br>
             <h2>Success</h2>
-            <p>Check your email for a booking confirmation. We'll see you soon.</p>
-            <button class="carebnb-ok-button" onclick="closeCarebnbPopup()">OK</button>
+            <p>Check your email for a booking confirmation.</p>
+            <a th:href="@{/home}"><button class="carebnb-ok-button" onclick="closeCarebnbPopup()">OK</button></a>
         </div>
     </div>
 

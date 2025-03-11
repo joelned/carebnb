@@ -82,8 +82,9 @@ public class AuthenticationTests {
         registerDTO = new RegisterDTO();
         registerDTO.setUsername("Ayo");
         registerDTO.setPassword("Ragnarok");
-        registerDTO.setRole(role);
-
+        registerDTO.setEmail("email@gmail.com");
+        registerDTO.setFirstName("Ayomide");
+        registerDTO.setLastName("Abodurin");
 
         refugeeDTO = new RefugeeDTO();
         refugeeDTO.setName("Ayo");
@@ -106,6 +107,7 @@ public class AuthenticationTests {
         userEntity.setPassword("password");
         userEntity.setRole(Collections.singletonList(role.get(1)));
         authentication = mock(Authentication.class);
+
     }
 
     @Test

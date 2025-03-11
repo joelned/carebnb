@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let offeringItems = [];
     let filesToUpload = [];
 
-    // Offering Toggle Function
     function toggleOffering(offering) {
         if (offering.classList.contains('selected')) {
             offering.classList.remove('selected');
@@ -25,12 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Add click listeners to initial offerings
     offeringsContainer.querySelectorAll('.offering').forEach(offering => {
         offering.addEventListener('click', () => toggleOffering(offering));
     });
 
-    // Add More Offering
     addMoreButton.addEventListener('click', function() {
         newOfferingInput.style.display = 'block';
     });
@@ -85,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Replace Image Function
     function replaceImage(container) {
         const newFileInput = document.createElement('input');
         newFileInput.type = 'file';
@@ -109,32 +105,25 @@ document.addEventListener('DOMContentLoaded', function() {
         newFileInput.click();
     }
 
-    // Remove Image Function
     function removeImage(container) {
         const fileName = container.dataset.fileName;
         filesToUpload = filesToUpload.filter(f => f.name !== fileName);
         container.remove();
     }
 
-    // Form Submission Handling
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
-        // Create a new FormData instance
         const formData = new FormData(form);
 
-        // Clear any pre-existing 'images[]' in formData
         formData.delete('images[]');
 
-        // Add files from filesToUpload to formData
         filesToUpload.forEach(file => {
             formData.append('images[]', file);
         });
 
-        // Add selected offerings to formData
         formData.append('offerings', offeringItems.join(', '));
 
-        // Perform the fetch request with the formData
         fetch(form.action, {
             method: form.method,
             body: formData

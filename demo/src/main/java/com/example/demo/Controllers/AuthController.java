@@ -1,6 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.DTOs.RegisterDTO;
+import com.example.demo.Configurations.SecurityConfig;
 import com.example.demo.Models.RefugeeDetails;
 import com.example.demo.Models.Role;
 import com.example.demo.Models.UserEntity;
@@ -10,10 +10,10 @@ import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.TokenService;
 import com.example.demo.Services.UserService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.TemplateEngine;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -69,6 +71,7 @@ public class AuthController {
                 redirectAttribute.addFlashAttribute("success", "Registration Successful");
                 httpSession.setAttribute("username", username);
                 httpSession.setAttribute("registered", true);
+                logger.info("{} registered as HOST", username);
                 return "redirect:/signup/host";
             }
             httpSession.setAttribute("username",username);
@@ -119,7 +122,7 @@ public class AuthController {
             cookie.setMaxAge(3600);
 
             response.addCookie(cookie);
-            logger.info("Login Successful and Performed.");
+            logger.info("{} logged in at " + LocalDateTime.now() + "as {} ", username, nameOfRole);
 
             return "redirect:/home";
     }
@@ -139,6 +142,7 @@ public class AuthController {
             ,countryOfFlee, countryOfOrigin, languagesSpoken, preferredLocation, selfDescription,
                     specialNeeds);
             model.addAttribute("message", "Details Saved Successfully");
+            logger.info("{} registered as REFUGEE", name + " at " + LocalDateTime.now());
             return "redirect:/login";
         }
         catch(Exception ex){

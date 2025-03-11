@@ -19,9 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -107,9 +107,10 @@ public class ListingService {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_REFUGEE')")
-    public void applyForListings(String name, Principal principal) throws InstanceNotFoundException {
+    public void applyForListings(String name, LocalDate checkIn, LocalDate checkOut, HttpSession session) throws InstanceNotFoundException {
+        String username = (String) session.getAttribute("username");
         HouseListing houseListing = listingRepository.findByName(name);
-        RefugeeDetails refugeeDetails = refugeeRepository.findByName(principal.getName());
+        RefugeeDetails refugeeDetails = refugeeRepository.findByName(username);
         if(houseListing == null){
            throw new InstanceNotFoundException("House Listing not found");
         }
@@ -120,6 +121,11 @@ public class ListingService {
         }
         ListingRequest request = new ListingRequest();
         request.setRefugeeDetails(refugeeDetails);
+        request.setHouseListing(houseListing);
+        request.setCheckIn(checkIn);
+        request.setCheckOut(checkOut);
+        request.setApproved(false);
+        request.setHostDetails(houseListing.getHostDetails());
         listingRequestRepository.save(request);
 
     }
@@ -131,18 +137,48 @@ public class ListingService {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
-    public void approveListing(Principal principal, int listingRequestId){
+    public void approveListing(int listingRequestId){
         listingRequestRepository.approveListingRequest(listingRequestId);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_HOST')")
+    public void declineRequest(int listingRequestId){
+        listingRequestRepository.deleteById(listingRequestId);
+    }
 
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
-    public void sendMail(Principal principal, int listingRequestId) {
+    public void sendDeclineMail(HttpSession session, int listingRequestId, String refugeeName) {
         try {
-            HostDetails hostDetails = hostRepository.findByUserEntityUsername(principal.getName());
+
+            String message = "Dear " + refugeeName + ",\n\n" +
+                    "We are regret to inform you that your request to stay with a host has been declined.\n\n" +
+                    "You may choose to apply for another listing. We wish you the best in your endeavors. \n\n" +
+                    "Kind regards,\n" +
+                    "The Refugee Support Team";
+
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setSubject("Request Declined From Host");
+            simpleMailMessage.setTo("ekweghjoel4@gmail.com");
+            simpleMailMessage.setFrom("joelekwegh3@gmail.com");
+            simpleMailMessage.setText(message);
+            mailSender.send(simpleMailMessage);
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+            logger.error(String.valueOf(ex));
+        }
+    }
+
+
+
+    @PreAuthorize("hasAuthority('SCOPE_HOST')")
+    public void sendMail(HttpSession session, int listingRequestId) {
+        try {
+            String username = (String) session.getAttribute("username");
+            HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
             ListingRequest request = listingRequestRepository.findByListingRequestId(listingRequestId);
             HouseListing listing = request.getHouseListing();
             RefugeeDetails refugeeDetails = request.getRefugeeDetails();
+            //listing is going to be null unless request  is filled successfully
             String message = "Dear " + refugeeDetails.getName() + ",\n\n" +
                     "We are pleased to inform you that your request to stay with a host has been accepted.\n\n" +
                     "You will be staying with " + hostDetails.getFirstName() + " " + hostDetails.getLastName() +
@@ -165,11 +201,12 @@ public class ListingService {
         }
     }
 
+
+
     public List<ListingImagesDTO>getListingImages(){
         return imagesRepository.findListingImages();
     }
     public List<HouseListingImages>getSpecificListingImages(int id){
         return imagesRepository.findByHouseListing_HouseListingId(id);
     }
-
 }

@@ -32,7 +32,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableMethodSecurity
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final RsaKeyProperties rsaKeys;
@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/css/**", "/js/**",
                                 "/images/**", "/", "/signup",
                                 "/signup/**", "/favicon.ico", "/login", "/get-started",
-                                "/api/v1/auth/register", "/error").permitAll()
+                                "/api/v1/auth/register", "/error", "/Pictures/**", "/listing-details/**").permitAll()
                         .anyRequest().authenticated())
 
                  .oauth2ResourceServer(oauth -> oauth
@@ -71,6 +71,9 @@ public class SecurityConfig {
                          jwtDecoder(),
                          converter()),
                          UsernamePasswordAuthenticationFilter.class
+                 )
+                 .exceptionHandling(ex-> ex
+                         .accessDeniedHandler(new CustomAccessDeniedHandler())
                  )
                  .addFilterBefore(new AnonymousAuthenticationFilter("annonymousKey"), CookieAuthenticationFilter.class)
                  .anonymous(AbstractHttpConfigurer::disable)

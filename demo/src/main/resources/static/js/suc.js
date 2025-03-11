@@ -1,4 +1,3 @@
-JAVA SCRIPT                                                                                                                                                                                   // Basic JavaScript (you can add more functionality here)
 
 // Example: Add an alert when the "Join as Refugee" button is clicked
 // const refugeeButton = document.querySelector('.refugee-button');
