@@ -1,6 +1,5 @@
 package com.example.demo.Services;
 
-import com.example.demo.DTOs.ListingImagesDTO;
 import com.example.demo.DTOs.RefugeeProjection;
 import com.example.demo.Models.*;
 import com.example.demo.Repositories.*;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,9 +52,7 @@ public class ListingService {
                               List<String> offerings, MultipartFile[] images) throws Exception {
 
         String username = (String)session.getAttribute("username");
-        System.out.println(username);
         HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
-        System.out.println("Recieved "+ images.length + "images");
         if(hostDetails == null){
             throw new Exception("Host Details not Found for user: " + username);
         }
@@ -137,19 +135,26 @@ public class ListingService {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
-    public void approveListing(int listingRequestId){
+    public void approveListing(UUID listingRequestId){
         listingRequestRepository.approveListingRequest(listingRequestId);
     }
 
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
-    public void declineRequest(int listingRequestId){
+    public void declineRequest(UUID listingRequestId){
         listingRequestRepository.deleteById(listingRequestId);
+        listingRequestRepository.flush();
     }
 
+    @Async
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
-    public void sendDeclineMail(HttpSession session, int listingRequestId, String refugeeName) {
+    public void sendDeclineMail(HttpSession session, UUID listingRequestId, String refugeeName) {
         try {
+            RefugeeDetails refugeeDetails = refugeeRepository.findByName(refugeeName);
 
+            if(refugeeDetails == null){
+                throw new Exception("Refugee Details not found");
+            }
+            // TODO: 16/03/2025  Do not forget to replace your email with that from refugee Details
             String message = "Dear " + refugeeName + ",\n\n" +
                     "We are regret to inform you that your request to stay with a host has been declined.\n\n" +
                     "You may choose to apply for another listing. We wish you the best in your endeavors. \n\n" +
@@ -170,25 +175,40 @@ public class ListingService {
 
 
 
+    @Async
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
-    public void sendMail(HttpSession session, int listingRequestId) {
+    public void sendMail(HttpSession session, UUID listingRequestId) {
         try {
             String username = (String) session.getAttribute("username");
-            HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
             ListingRequest request = listingRequestRepository.findByListingRequestId(listingRequestId);
+
+            if(request == null || request.getHouseListing() == null || request.getRefugeeDetails()== null){
+                logger.warn("Invalid request data for email notification. Request ID {}", listingRequestId);
+                throw new Exception("Invalid request data for email notification.");
+            }
+
+            HostDetails hostDetails = hostRepository.findByUserEntityUsername(username);
+
+            if(hostDetails == null){
+                logger.warn("Host details not found");
+                throw new Exception("Host Details Not Found");
+            }
+
             HouseListing listing = request.getHouseListing();
             RefugeeDetails refugeeDetails = request.getRefugeeDetails();
-            //listing is going to be null unless request  is filled successfully
+
             String message = "Dear " + refugeeDetails.getName() + ",\n\n" +
                     "We are pleased to inform you that your request to stay with a host has been accepted.\n\n" +
-                    "You will be staying with " + hostDetails.getFirstName() + " " + hostDetails.getLastName() +
-                    " at the following address:\n" +
-                    listing.getAddress()+ "\n\n" +
-                    "Please make sure to contact your host at "+ hostDetails.getEmail() + " " +
-                    "ahead of your arrival to confirm any final details.\n\n" +
+                    "You will be staying with " + hostDetails.getFirstName() + " " +
+                    hostDetails.getLastName() + " at the following address:\n" +
+                    listing.getAddress() + "\n\n" +
+                    "Please make sure to contact your host at " + hostDetails.getEmail() +
+                    " ahead of your arrival to confirm any final details.\n\n" +
                     "We wish you all the best during your stay and are here to support you in any way we can.\n\n" +
                     "Kind regards,\n" +
                     "The Refugee Support Team";
+
+            // TODO: 16/03/2025  Do not forget to replace your email with that from refugee Details
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setSubject("Request Accepted From Host");
             simpleMailMessage.setTo("ekweghjoel4@gmail.com");
@@ -203,10 +223,7 @@ public class ListingService {
 
 
 
-    public List<ListingImagesDTO>getListingImages(){
-        return imagesRepository.findListingImages();
-    }
-    public List<HouseListingImages>getSpecificListingImages(int id){
+    public List<HouseListingImages>getSpecificListingImages(UUID id){
         return imagesRepository.findByHouseListing_HouseListingId(id);
     }
 }

@@ -5,15 +5,16 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
 public class ListingRequest {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.AUTO
     )
-    private int listingRequestId;
+    private UUID listingRequestId;
     private LocalDate checkIn;
     private LocalDate checkOut;
     @ManyToOne(fetch = FetchType.EAGER)

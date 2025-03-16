@@ -6,8 +6,9 @@ import com.example.demo.Services.ListingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,11 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
+@EnableCaching
 public class PageController implements ErrorController {
 
     @Autowired
@@ -43,10 +45,11 @@ public class PageController implements ErrorController {
         return "index";
     }
 
+    @Cacheable(value="homePageImages")
     @GetMapping("/")
     public String basePage(Model model, HttpSession session) {
-            List<HouseListingImages> listingImages = imagesRepository.findAll();
-            List<HouseListing> listings = listingRepository.findAll();
+            List<HouseListingImages> listingImages = imagesRepository.findByHouseListingBookedFalse();
+            List<HouseListing> listings = listingRepository.findByBookedFalse();
             model.addAttribute("houseListings", listings);
             model.addAttribute("listingImages", listingImages);
             return "home";
@@ -58,8 +61,8 @@ public class PageController implements ErrorController {
 
         if(authentication.isAuthenticated()){
             String role = (String)session.getAttribute("role");
-            List<HouseListingImages> listingImages = imagesRepository.findAll();
-            List<HouseListing> listings = listingRepository.findAll();
+            List<HouseListingImages> listingImages = imagesRepository.findByHouseListingBookedFalse();
+            List<HouseListing> listings = listingRepository.findByBookedFalse();
             model.addAttribute("houseListings", listings);
             model.addAttribute("role", role);
             model.addAttribute("listingImages", listingImages);
@@ -139,8 +142,9 @@ public class PageController implements ErrorController {
         return "add";
     }
 
+    @Cacheable(value = "listingImages")
     @GetMapping("/listing-details/{id}")
-    public String listingDetails(@PathVariable int id, Model model) {
+    public String listingDetails(@PathVariable UUID id, Model model) {
         try {
             List<HouseListingImages> imagesForListing = listingService.getSpecificListingImages(id);
             Optional<HouseListing> houseListing = listingRepository.findById(id);

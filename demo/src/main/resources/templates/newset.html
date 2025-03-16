@@ -25,7 +25,6 @@
             <a th:href="@{/logout}"><button class="logout-btn">Log out</button></a>
         </div>
     </aside>
-
     <main class="settings-content">
         <h2>Settings</h2>
         <div class="form-row">
@@ -38,7 +37,6 @@
                 <input type="number" id="age" min="0" th:value="${refugeeDetails.age}" readonly>
             </div>
         </div>
-
         <div class="form-row">
             <div class="form-group">
                 <label>Email</label>
@@ -71,7 +69,6 @@
                 <input type="text" id="language" th:value="${refugeeDetails.languagesSpoken}" readonly>
             </div>
         </div>
-
         <div class="form-row">
             <div class="form-group">
                 <label>Preferred Location</label>
@@ -82,7 +79,6 @@
                 <input type="text" id="needs" th:value="${refugeeDetails.specialNeeds}" readonly>
             </div>
         </div>
-
         <div class="form-group toggle-container">
             <label>Profile Visibility</label>
             <label class="switch">
@@ -90,10 +86,8 @@
                 <span class="slider round"></span>
             </label>
         </div>
-
     </main>
 </div>
-
 <script src="/js/newset.js"></script>
 </body>
 </html>

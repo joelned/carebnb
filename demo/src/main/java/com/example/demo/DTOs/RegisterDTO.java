@@ -1,11 +1,8 @@
 package com.example.demo.DTOs;
 
-import com.example.demo.Models.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import java.util.List;
-
 @Data
 public class RegisterDTO {
     @NotBlank(message = "Username is required")

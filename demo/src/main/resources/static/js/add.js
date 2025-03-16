@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     function disableButton(){
-        let button = document.getElementById("submitButton");
+        const button = document.getElementById("submitButton");
         button.disabled = true;
 
         setTimeout(function() {

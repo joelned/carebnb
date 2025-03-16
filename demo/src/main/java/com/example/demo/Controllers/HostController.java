@@ -1,25 +1,19 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.DTOs.ApprovalResponse;
-import com.example.demo.DTOs.ErrorResponse;
 import com.example.demo.Services.ListingService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Controller
+@RestController
+@EnableCaching
 @RequestMapping("/api/v1")
 public class HostController {
 
@@ -28,6 +22,7 @@ public class HostController {
 
    private final Logger logger = LoggerFactory.getLogger(HostController.class);
 
+   @CacheEvict(value="homePageImages", allEntries= true)
     @PostMapping("/create-listing")
     public void uploadListing(
             HttpSession session,

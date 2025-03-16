@@ -1,26 +1,22 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.DTOs.ApprovalResponse;
-import com.example.demo.DTOs.ErrorResponse;
 import com.example.demo.Models.HouseListing;
 import com.example.demo.Models.HouseListingImages;
+import com.example.demo.Models.ListingRequest;
 import com.example.demo.Repositories.*;
 import com.example.demo.Services.ListingService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -49,23 +45,16 @@ public class ListingController {
     @Autowired
     private ListingService listingService;
 
-    @GetMapping(path = "/requests")
-    public ResponseEntity<?> getListingRequests(Principal principal) {
-        try {
-            return new ResponseEntity<>(listingService.getListingRequests(principal), HttpStatus.OK);
-        }
-        catch (Exception e){
-            ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), LocalDateTime.now());
-            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @PostMapping("/approve-request")
-    public String approveRequest(HttpSession session, @RequestParam("listingRequestId") int listingRequestId){
+    public String approveRequest(HttpSession session, @RequestParam("listingRequestId") UUID listingRequestId){
         try{
             String username = (String)session.getAttribute("username");
             listingService.approveListing(listingRequestId);
-
+            ListingRequest request = listingRequestRepository.findByListingRequestId(listingRequestId);
+            HouseListing listing = request.getHouseListing();
+            listing.setBooked(true);
+            listingRepository.save(listing);
             logger.info("Listing Request approved by HOST {}", username);
 
             listingService.sendMail(session, listingRequestId);
@@ -80,7 +69,7 @@ public class ListingController {
 
     @PostMapping("/decline-request")
     public String declineRequest(HttpSession session, @RequestParam("refugeeName") String refugeeName,
-    @RequestParam("listingRequestId") int listingRequestId) {
+    @RequestParam("listingRequestId") UUID listingRequestId) {
         try{
            String username = (String)session.getAttribute("username");
            listingService.declineRequest(listingRequestId);
@@ -96,19 +85,9 @@ public class ListingController {
         }
     }
 
-    @GetMapping("/listing-images")
-    public ResponseEntity<Object>getListingImages() {
-        try {
-            return new ResponseEntity<>(listingService.getListingImages(), HttpStatus.OK);
-        }
-        catch(Exception ex){
-            ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), LocalDateTime.now());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @GetMapping("/listing/{id}")
-    public String getListing(@PathVariable int id, RedirectAttributes attributes){
+    public String getListing(@PathVariable UUID id, RedirectAttributes attributes){
         try{
             List<HouseListingImages> imagesForListing = listingService.getSpecificListingImages(id);
             Optional<HouseListing> houseListing = listingRepository.findById(id);

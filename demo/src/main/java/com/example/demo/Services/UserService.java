@@ -137,5 +137,4 @@ public class UserService {
             logger.error(ex.getMessage());
         }
     }
-
 }

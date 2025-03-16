@@ -1,6 +1,5 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Configurations.SecurityConfig;
 import com.example.demo.Models.RefugeeDetails;
 import com.example.demo.Models.Role;
 import com.example.demo.Models.UserEntity;
@@ -10,7 +9,6 @@ import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Services.TokenService;
 import com.example.demo.Services.UserService;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;

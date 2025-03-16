@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -87,7 +88,7 @@ public class ListingTests {
     @WithMockUser(username = "test-user")
     void approvalOfRequestTest() throws Exception {
         // Arrange
-        int listingRequestId = 123;
+        UUID listingRequestId = UUID.randomUUID();
 
         doNothing().when(listingService).approveListing(eq(listingRequestId));
         doNothing().when(listingService).sendMail(any(HttpSession.class), eq(listingRequestId));

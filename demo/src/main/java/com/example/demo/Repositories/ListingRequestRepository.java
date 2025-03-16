@@ -11,19 +11,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
+import java.util.UUID;
 
-public interface ListingRequestRepository extends JpaRepository<ListingRequest, Integer> {
+public interface ListingRequestRepository extends JpaRepository<ListingRequest, UUID> {
     ListingRequest findFirstByRefugeeDetailsAndApprovedTrue(RefugeeDetails refugeeDetails);
 
     @Modifying
     @Transactional
     @Query("UPDATE ListingRequest lr SET lr.approved = true WHERE lr.listingRequestId = :listingRequestId")
-    void approveListingRequest(@Param("listingRequestId")int listingRequestId);
+    void approveListingRequest(@Param("listingRequestId")UUID listingRequestId);
 
     @Modifying
     @Transactional
     @Query("UPDATE ListingRequest lr SET lr.approved = false WHERE lr.listingRequestId = :listingRequestId")
-    void rejectListingRequest(@Param("listingRequestId")int listingRequestId);
+    void rejectListingRequest(@Param("listingRequestId")UUID listingRequestId);
 
 
 
@@ -36,7 +37,7 @@ public interface ListingRequestRepository extends JpaRepository<ListingRequest, 
             "WHERE lr.hostDetails = :hostDetails")
     List<RefugeeProjection> findRefugeeDetailsByHostDetails(@Param("hostDetails") HostDetails hostDetails);
 
-    ListingRequest findByListingRequestId(int listingRequestId);
+    ListingRequest findByListingRequestId( UUID listingRequestId);
 
     List<ListingRequest> findByHostDetails(HostDetails hostDetails);
 }

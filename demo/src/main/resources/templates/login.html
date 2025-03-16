@@ -21,13 +21,11 @@
         <form th:action="@{/api/v1/auth/login}" method = "post" id="signup-form">
             <input type="text" id="email" name="username" placeholder="Username">
             <input type="password" id="password" name="password" placeholder="Password">
-
             <button type="submit" class="create-button">Login</button>
         </form>
         <div class="register-link">
             <p>Don't have an account? <a th:href="@{/signup}">Register here</a></p>
         </div>
-
         <div th:if="${error != null}" class = "message">
             <p th:text="${error}"></p>
         </div>
@@ -35,10 +33,7 @@
             <p th:text="${error}"></p>
             <p><a th:href = "@{/get-started}" class = "fillRefugeeDetailsMessage">Fill Refugee Details</a></p>
         </div>
-
     </div>
-
-
     <div class="image-section">
         <img src="/images/Group 30.png" alt="Carebnb Image">
     </div>

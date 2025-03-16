@@ -2,7 +2,6 @@ package com.example.demo.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
 

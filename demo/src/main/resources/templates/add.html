@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add Apartment">
+    <meta name="author" content="Carebnb Team">
+    <meta name="robots" content="index, follow">
     <title>Create Apartment</title>
     <link rel="stylesheet" href="/css/add.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" media="print" onload="this.media='all'">
+    <link rel="preconnect" href="https://fonts.gstatic.com" media="print" onload="this.media='all'" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" media="print" onload="this.media='all'" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -42,11 +45,11 @@
             <div class="form-group">
                 <label>Offerings</label>
                 <div class="offerings-container">
-                    <button type="button" class="add-more" id="add-more-button">+ Add More</button>
+                    <button aria-label="add more" type="button" class="add-more" id="add-more-button">+ Add More</button>
                 </div>
                 <div id="new-offering-input" style="display: none;">
                     <input type="text" id="new-offering-text" placeholder="Enter new offering" name="new_offering">
-                    <button type="button" id="add-new-offering">Add</button>
+                    <button aria-label="add offering" type="button" id="add-new-offering">Add</button>
                 </div>
             </div>
             <input type="hidden" name="offerings" id="offerings-input">
@@ -68,7 +71,7 @@
             <input type="text" id="address" name="address" value="Address">
         </div>
         <div class = "footer-buttons">
-            <button id="submitButton" onclick="" type="submit" class="add-property">Add Property</button>
+            <button aria-label="add property" id="submitButton" onclick="" type="submit" class="add-property">Add Property</button>
         </div>
         </form>
         <div class="footer-buttons">
@@ -107,6 +110,6 @@
     <p th:text="${error}"></p>
 </div>
 
-<script src="/js/add.js"></script>
+<script src="/js/add.js" defer></script>
 </body>
 </html>

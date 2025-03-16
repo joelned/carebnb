@@ -3,43 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Host Properties Page">
+    <meta name="author" content="Carebnb Team">
+    <meta name="robots" content="index, follow">
     <title>My Properties</title>
     <link rel="stylesheet" href="/css/prop.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" media="print" onload="this.media='all'">
+    <link rel="preconnect" href="https://fonts.gstatic.com" media="print" onload="this.media='all'" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="profile-section">
-                <div th:if="${hostName != null}">
-                    <h3 th:text="${hostName}" class="user-name"></h3>
-                </div>
-                <div th:if="${hostName == null}">
-                    <h3 class="user-name"></h3>
-                </div>
-
+<button id="menu-toggle" class="menu-toggle">☰</button>
+<div class="sidebar-overlay"></div>
+<div class="container">
+    <aside class="sidebar">
+        <div class="profile-section">
+            <div th:if="${hostName != null}">
+                <h3 th:text="${hostName}" class="user-name"></h3>
             </div>
-            <nav>
-                <a th:href="@{/properties}"><span>🏠</span> Properties</a>
-                <a th:href= "@{/clients}"><span>👥</span> Client</a>
-                <a th:href="@{/host-settings}" class="active"><span>⚙️</span> Settings</a>
-            </nav>
-            <a th:href="@{/logout}"><button class="logout-btn" style="margin-top: auto;">Log out</button></a>
-        </aside>
-
-        <main class="content">
-            <header>
-                <h1>My Properties</h1>
-                <div class="header-buttons">
-                    <a th:href="@{/create-listing}"><button id="add-property-button">+ Add new apartment</button></a>
-                </div>
-            </header>
-
-            <div>
-            <section id="properties-grid" th:if="${houseListings != null}" class="properties-grid" th:each="listing : ${houseListings}">
-                <div class="property-card">
+            <div th:if="${hostName == null}">
+                <h3 class="user-name"></h3>
+            </div>
+        </div>
+        <nav>
+            <a th:href="@{/properties}"><span>🏠</span> Properties</a>
+            <a th:href= "@{/clients}"><span>👥</span> Client</a>
+            <a th:href="@{/host-settings}" class="active"><span>⚙️</span> Settings</a>
+        </nav>
+        <a th:href="@{/logout}"><button aria-label="Logout" lass="logout-btn">Log out</button></a>
+    </aside>
+    <main class="content">
+        <header>
+            <h1>My Properties</h1>
+            <div class="header-buttons">
+                <a th:href="@{/create-listing}"><button aria-label="Add Apartment" id="add-property-button">+ Add new apartment</button></a>
+            </div>
+        </header>
+        <div>
+            <section id="properties-grid" th:if="${houseListings != null}" class="properties-grid">
+                <div class="property-card" th:each="listing : ${houseListings}">
                     <img th:src="${listing.listingImages[0].imagePath}" alt="First Property" />
                     <h3 th:text="${listing.name}"></h3>
                     <div class="location">
@@ -47,18 +49,45 @@
                         <p>[[${listing.address}]]</p>
                     </div>
                     <div class="actions">
-                        <button class="details" style="color: #FF5A5F">View Details</button>
+                        <button aria-label="Details" class="details" style="color: #FF5A5F">View Details</button>
                     </div>
                 </div>
             </section>
-                <section id="no-properties" class="no-properties" th:if="${houseListings == null}">
-                    <p>No properties uploaded yet.</p>
-                </section>
-            </div>
+            <section id="no-properties" class="no-properties" th:if="${houseListings == null}">
+                <p>No properties uploaded yet.</p>
+            </section>
+        </div>
+    </main>
+</div>
+<script>
+    // JavaScript for mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
 
-        </main>
-    </div>
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
 
-    <script src="/js/prop.js"></script>
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Close sidebar when clicking a link (for mobile)
+        const sidebarLinks = document.querySelectorAll('.sidebar a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+    });
+</script>
+<script src="/js/prop.js" defer></script>
 </body>
 </html>

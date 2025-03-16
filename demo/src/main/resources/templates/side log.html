@@ -7,14 +7,12 @@
     <link rel="stylesheet" href="/css/side log.css">
 </head>
 <body>
-
     <div class="sidebar">
         <img src="/images/Form image.png" alt="Sidebar Image">
         <div class="quote">
             "There's nothing more important than a good, safe, secure home." - Rosalynn Carter
         </div>
     </div>
-
     <div class="main-content">
         <form th:action="@{/api/v1/auth/register}" method="post" enctype="multipart/form-data">
         <div class="header">
@@ -25,7 +23,6 @@
                 <label for="profile-input" id="upload-label"></label>
             </div>
         </div>
-
         <div class="form-container">
             <div class="form-group">
                 <div>
@@ -37,7 +34,6 @@
                     <input type="number" id="age" name="age" min="0" style="background-image: none;" required>
                 </div>
             </div>
-
             <div class="form-group">
                 <div>
                     <label for="email">Email</label>
@@ -51,7 +47,6 @@
                     </select>
                 </div>
             </div>
-
              <div class="form-group">
                 <div>
                     <label for="dependents">Number of Dependents</label>
@@ -64,7 +59,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <div>
                     <label for="country">Country of Origin</label>
@@ -74,7 +68,6 @@
                         <option>Iraq</option>
                         <option>Ukraine</option>
                         <option>Venezuela</option>
-                        <!-- Add more countries as needed -->
                     </select>
                 </div>
                 <div>
@@ -90,7 +83,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <div>
                     <label for="languages">Languages Spoken</label>
@@ -107,7 +99,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <div>
                     <label for="special_needs">Special Needs</label>
@@ -118,19 +109,15 @@
                         <option>Hearing Impairment</option>
                         <option>Dietary Restrictions</option>
                         <option>Other</option>
-                        <!-- Add more special needs options as needed -->
                     </select>
                 </div>
             </div>
-
             <label for="about_yourself">Tell us about yourself</label>
             <textarea id="about_yourself" name="selfDescription" rows="3" cols="50" placeholder="Briefly describe your situation and needs" required></textarea>
-
         </div>
             <button type = "submit" id="done-button">Done</button>
         </form>
     </div>
-
     <script src="/js/side log.js"></script>
 </body>
 </html>
