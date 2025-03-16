@@ -222,7 +222,6 @@ public class ListingService {
     }
 
 
-
     public List<HouseListingImages>getSpecificListingImages(UUID id){
         return imagesRepository.findByHouseListing_HouseListingId(id);
     }

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Host SignUp Page">
+    <meta name="author" content="Carebnb Team">
+    <meta name="robots" content="index, follow">
     <title>Host Signup</title>
     <link rel="stylesheet" href="/css/sign.css">
 </head>
@@ -24,7 +27,7 @@
                 <input type="email" id="email" name="email" placeholder="Email">
                 <input type="text" id="username" name="username" placeholder="Username">
                 <input type="password" id="password" name="password" placeholder="Password">
-                <button type="submit" class="create-button">Create Account</button>
+                <button aria-label="Create Account" type="submit" class="create-button">Create Account</button>
             </form>
             <div class="register-link">
                 <p>Have an account? <a th:href="@{/login}">Login</a></p>
