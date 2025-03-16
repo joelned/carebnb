@@ -20,9 +20,9 @@
             <span>carebnb</span>
         </a>
         <div class="header-actions">
-            <span>Rent your home</span>
+            <a th:href="@{/create-apartment}"><span>Rent your home</span></a>
             <span role="img" aria-label="language">🌐</span>
-            <span role="img" aria-label="profile">👤</span>
+            <a th:href="@{/host-settings}"><span role="img" aria-label="profile">👤</span></a>
         </div>
     </div>
 </header>
@@ -109,7 +109,6 @@
 <div th:if="${error != null}" class="message">
     <p th:text="${error}"></p>
 </div>
-
 <script src="/js/add.js" defer></script>
 </body>
 </html>
