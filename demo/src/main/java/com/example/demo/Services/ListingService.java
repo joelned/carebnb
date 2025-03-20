@@ -125,7 +125,6 @@ public class ListingService {
         request.setApproved(false);
         request.setHostDetails(houseListing.getHostDetails());
         listingRequestRepository.save(request);
-
     }
 
     @PreAuthorize("hasAuthority('SCOPE_HOST')")
